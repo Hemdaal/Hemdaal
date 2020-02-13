@@ -1,0 +1,145 @@
+@startuml
+
+class Organisation {
+    String name
+    List<User> users
+    List<Project> projects
+    List<Widget> widgets
+}
+
+class User {
+    String name
+    String email
+    String role
+}
+
+note right of User
+    Non MultiTenant architecture. User scope will be always within Organisation.
+    Not a SAAS Architecture.
+end note
+
+Organisation "1" *-- "Many" User
+
+class Project {
+    String name
+    List<SoftwareComponent> softwareComponents
+    ProjectManagement projectManagement
+    List<Widget> widgets
+}
+
+Organisation "1" *-- "Many" Project
+
+note right of Project
+    1. ProjectManagement to track overall progress and issues.
+        There will be a itemMetric for each softwareComponents and they can be linked.
+    2. Widgets -> Project level widgets
+end note
+
+class SoftwareComponent {
+    String name
+    List<MetricComponent> metricComponents
+    List<Widget> widgets
+}
+
+Project "1" *-- "Many" SoftwareComponent
+
+abstract class MetricComponent {
+    MetricCollector collector
+}
+
+SoftwareComponent "1" *-- "Many" MetricComponent
+
+abstract class MetricCollector {
+    String resourceUrl
+    AuthInfo authInfo
+    long lastSyncTime
+
+    void onSync()
+}
+
+note right of MetricCollector
+    RepositoryCollector
+        GitlabRepoCollector
+        GitHubRepoCollector
+    BuildCollector
+        JenkinsBuildCollector
+        GitlabBuildCollector
+    etc.
+end note
+
+MetricComponent "1" *-- "1" MetricCollector
+
+note right of MetricComponent
+    Repository
+    StaticAnalysis
+    Build
+    PerformanceAnalysis
+    Deploy
+    HealthCheck
+    Stories
+end note
+
+class Repository<extends MetricComponent> {
+    String masterBranchName
+    List<Commit> commits
+    List<MergeRequest> mergeRequests
+}
+
+Repository <|-- MetricComponent
+
+class Commit {
+    String sha
+    Collaborator author
+    List<String> branches
+    long time
+}
+
+Repository "1" *-- "Many" Commit
+
+class Collaborator {
+    String name
+    String email
+}
+
+Commit "1" o-- "1" Collaborator
+
+class MergeRequest {
+    String srcBranch
+    String destBranch
+    boolean status
+    Collaborator author
+    List<Collaborator> approves
+}
+
+Repository "1" *-- "Many" MergeRequest
+
+class Build {
+    List<BuildJob> jobs
+}
+
+Build <|-- MetricComponent
+
+class BuildJob {
+    String id
+    boolean isSuccess
+    long time
+    String version
+}
+
+Build "1" *-- "Many" BuildJob
+
+class Deploy {
+    List<DeployJob> jobs
+}
+
+Deploy <|-- MetricComponent
+
+class DeployJob {
+    String id
+    String stage
+    String version
+}
+
+Deploy "1" *-- "Many" DeployJob
+
+@enduml

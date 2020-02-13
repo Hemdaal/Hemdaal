@@ -1,0 +1,5 @@
+@startuml
+node FrontEnd
+node Backend
+node SQLDatabase
+@enduml
