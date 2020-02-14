@@ -91,10 +91,18 @@ class Commit {
     String sha
     Collaborator author
     List<String> branches
+    CommitType type
     long time
 }
 
 Repository "1" *-- "Many" Commit
+
+enum CommitType {
+    COMMIT
+    MERGE
+}
+
+Commit "1" *-- "1" CommitType
 
 class Collaborator {
     String name
@@ -121,12 +129,14 @@ Build <|-- MetricComponent
 
 class BuildJob {
     String id
-    boolean isSuccess
-    long time
     String version
+    long time
+    boolean isSuccess
+    Commit? triggeredCommit
 }
 
 Build "1" *-- "Many" BuildJob
+BuildJob "Many" o-- "1" Commit
 
 class Deploy {
     List<DeployJob> jobs
@@ -138,8 +148,12 @@ class DeployJob {
     String id
     String stage
     String version
+    long time
+    boolean isSuccess
+    Commit? triggeredCommit
 }
 
 Deploy "1" *-- "Many" DeployJob
+DeployJob "Many" o-- "1" Commit
 
 @enduml
