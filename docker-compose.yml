@@ -1,0 +1,39 @@
+version: '3'
+services:
+  restApi:
+    image: hemdaal_api:latest
+    container_name: hemdaal-api-container
+    expose:
+      - 8080
+      - 8443
+      - 80
+      - 443
+    ports:
+      - '80:8080'
+      - '443:8443'
+    environment:
+      - DB_HOST=localhost
+      - DB_PORT=54321
+      - DB_USERNAME=smartuser
+      - DB_PASSWORD=smarts3cr3t
+    links:
+      - database:database
+    restart: always
+    volumes:
+      - ./ssl/:/etc/ssl/
+
+  database:
+    image: postgres:9.6.0
+    container_name: db-container
+    restart: always
+    expose:
+      - 54321
+    networks:
+      - default
+    volumes:
+      - data-volume:/data/db
+    ports:
+      - '54321:5432'
+
+volumes:
+  data-volume:

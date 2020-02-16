@@ -1,0 +1,69 @@
+apply plugin: 'kotlin'
+apply plugin: 'java'
+apply plugin: "com.github.johnrengelman.shadow"
+apply plugin: 'application'
+
+buildscript {
+
+    ext.ktor_version = '1.2.4'
+    ext.logback_version = '1.2.3'
+    ext.slf4j_version = '1.7.25'
+
+
+    repositories {
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.github.jengelman.gradle.plugins:shadow:5.1.0"
+    }
+}
+
+group 'com.hemdaal'
+version '1.0-SNAPSHOT'
+
+mainClassName = "io.ktor.server.netty.EngineMain"
+
+sourceCompatibility = 1.8
+compileKotlin { kotlinOptions.jvmTarget = "1.8" }
+compileTestKotlin { kotlinOptions.jvmTarget = "1.8" }
+
+kotlin { experimental { coroutines "enable" } }
+
+repositories {
+    mavenCentral()
+    jcenter()
+    maven { url "https://dl.bintray.com/kotlin/ktor" }
+}
+
+jar {
+    archivesBaseName = 'restApi-backend'
+    archiveClassifier.set(null)
+}
+
+shadowJar {
+    archivesBaseName = 'restApi-backend'
+    version = null
+    archiveClassifier.set(null)
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation "io.ktor:ktor-server-netty:$ktor_version"
+    implementation "io.ktor:ktor-gson:$ktor_version"
+    implementation "io.ktor:ktor-network-tls:$ktor_version"
+    implementation "io.ktor:ktor-auth:$ktor_version"
+    implementation "ch.qos.logback:logback-classic:$logback_version"
+    implementation "org.mongodb:mongodb-driver:3.11.1"
+    implementation project(path: ':backend')
+    implementation project(path: ':database')
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}

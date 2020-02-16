@@ -1,23 +1,23 @@
 @startuml
 
+class User {
+    String name
+    String email
+}
+
 class Organisation {
     String name
-    List<User> users
+    Map<User, Role> userWithRoles
     List<Project> projects
     List<Widget> widgets
 }
 
-class User {
+class Role {
     String name
-    String email
-    String role
+    String[] access
 }
 
-note right of User
-    Non MultiTenant architecture. User scope will be always within Organisation.
-    Not a SAAS Architecture.
-end note
-
+Organisation "1" *-- "Many" Role
 Organisation "1" *-- "Many" User
 
 class Project {
