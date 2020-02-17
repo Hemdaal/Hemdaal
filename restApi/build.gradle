@@ -20,9 +20,6 @@ buildscript {
     }
 }
 
-group 'com.hemdaal'
-version '1.0-SNAPSHOT'
-
 mainClassName = "io.ktor.server.netty.EngineMain"
 
 sourceCompatibility = 1.8
@@ -57,13 +54,5 @@ dependencies {
     implementation "ch.qos.logback:logback-classic:$logback_version"
     implementation "org.mongodb:mongodb-driver:3.11.1"
     implementation project(path: ':backend')
-    implementation project(path: ':database')
     testImplementation group: 'junit', name: 'junit', version: '4.12'
-}
-
-compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
-}
-compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
 }

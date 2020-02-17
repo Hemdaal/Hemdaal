@@ -1,5 +1,6 @@
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.sql.Database
 
 class DatabaseFactory(
@@ -10,8 +11,8 @@ class DatabaseFactory(
 
     fun init() {
         Database.connect(hikari())
-        //val flyway = Flyway.configure().dataSource(dbUrl, dbUser, dbPassword).load()
-        //flyway.migrate()
+        val flyway = Flyway.configure().dataSource(dbUrl, dbUser, dbPassword).load()
+        flyway.migrate()
     }
 
     private fun hikari(): HikariDataSource {
