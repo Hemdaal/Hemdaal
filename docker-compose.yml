@@ -2,8 +2,8 @@ version: '3'
 services:
   rest_api:
     build:
-      context: ./Docker
-      dockerfile: hemdaal.Dockerfile
+      context: .
+      dockerfile: Docker/hemdaal.Dockerfile
     container_name: hemdaal-api-container
     expose:
       - 8080
@@ -14,10 +14,11 @@ services:
       - '80:8080'
       - '443:8443'
     environment:
-      - DB_HOST=localhost
-      - DB_PORT=54321
-      - DB_USERNAME=smartuser
-      - DB_PASSWORD=smarts3cr3t
+      - DB_HOST=0.0.0.0
+      - DB_PORT=5432
+      - DB_USERNAME=hemdaal
+      - DB_PASSWORD=secrect
+      - AUTH_SECRET_KEY=secret
     links:
       - database:database
     restart: always
