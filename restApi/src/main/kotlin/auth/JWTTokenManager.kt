@@ -9,28 +9,28 @@ import domains.User
 import main.kotlin.ApplicationConfig
 
 
-object JWTTokenManager {
+class JWTTokenManager {
 
-    private val SIGNING_ALGORITHM: Algorithm = Algorithm.HMAC256(ApplicationConfig.AUTH_SECRET)
-    private const val ISSUER: String = "hemdaal_rest"
-    private const val EMAIL_KEY: String = "email_key"
+    private val signingAlgorithm: Algorithm = Algorithm.HMAC256(ApplicationConfig.AUTH_SECRET)
+    private val issuer: String = "hemdaal_rest"
+    private val emailKey: String = "email_key"
 
     fun createToken(user: User): String? {
 
         return JWT.create()
-            .withIssuer(ISSUER)
-            .withClaim(EMAIL_KEY, user.email)
-            .sign(SIGNING_ALGORITHM)
+            .withIssuer(issuer)
+            .withClaim(emailKey, user.email)
+            .sign(signingAlgorithm)
     }
 
     fun verifyToken(token: String): String? {
         try {
-            val verifier: JWTVerifier = JWT.require(SIGNING_ALGORITHM)
-                .withIssuer(ISSUER)
+            val verifier: JWTVerifier = JWT.require(signingAlgorithm)
+                .withIssuer(issuer)
                 .build() //Reusable verifier instance
 
             val jwt: DecodedJWT = verifier.verify(token)
-            return jwt.getClaim(EMAIL_KEY).asString()
+            return jwt.getClaim(emailKey).asString()
         } catch (e: JWTVerificationException) {
 
         }

@@ -3,7 +3,6 @@ package main.kotlin.graphql
 import com.expedia.graphql.SchemaGeneratorConfig
 import com.expedia.graphql.TopLevelObject
 import com.expedia.graphql.toSchema
-import domains.UserService
 import graphql.ExecutionInput
 import graphql.GraphQL
 import graphql.schema.GraphQLSchema
@@ -18,14 +17,20 @@ import io.ktor.response.respond
 import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.routing
+import main.kotlin.graphql.queries.UserQuery
+import org.koin.ktor.ext.inject
 
-data class GraphQLRequest(val query: String, val operationName: String, val variables: Map<String, Any>)
+data class GraphQLRequest(val query: String?, val operationName: String?, val variables: Map<String, Any>?)
 
 fun Application.installGraphQL() {
-    val userService = UserService()
+    val userQuery: UserQuery by inject()
 
     val config = SchemaGeneratorConfig(listOf("main.kotlin.models"))
-    val queries = listOf(TopLevelObject(UserQuery(userService)))
+    val queries = listOf(
+        TopLevelObject(
+            userQuery
+        )
+    )
     val schema: GraphQLSchema = toSchema(config = config, queries = queries)
     val graphQL = GraphQL.newGraphQL(schema).build()
 

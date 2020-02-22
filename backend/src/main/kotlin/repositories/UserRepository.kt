@@ -6,12 +6,15 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.transactions.transaction
 
 class UserRepository {
 
     fun getUserBy(ids: List<Long>): List<User> {
-        return UserTable.select(where = { UserTable.id inList ids }).mapNotNull {
-            convertRowToUser(it)
+        return transaction {
+            UserTable.select(where = { UserTable.id inList ids }).mapNotNull {
+                convertRowToUser(it)
+            }
         }
     }
 
@@ -20,27 +23,33 @@ class UserRepository {
         email: String,
         passwordHash: String
     ) {
-        UserTable.insert {
-            it[UserTable.name] = name.trim()
-            it[UserTable.email] = email.trim()
-            it[UserTable.passwordHash] = passwordHash
+        transaction {
+            UserTable.insert {
+                it[UserTable.name] = name.trim()
+                it[UserTable.email] = email.trim()
+                it[UserTable.passwordHash] = passwordHash
+            }
         }
     }
 
     fun isEmailExist(email: String): Boolean {
-        return UserTable.select(where = { UserTable.email eq email.trim() }).count() != 0
+        return transaction { UserTable.select(where = { UserTable.email eq email.trim() }).count() != 0 }
     }
 
     fun returnUserByEmail(email: String): User? {
-        val row = UserTable.select(where = { UserTable.email.eq(email) }).singleOrNull()
+        val row = transaction {
+            UserTable.select(where = { UserTable.email.eq(email) }).singleOrNull()
+        }
         return row?.let {
             convertRowToUser(it)
         }
     }
 
     fun returnUserByCheckingEmailAndPassword(email: String, passwordHash: String): User? {
-        val row = UserTable.select(where = { UserTable.email.eq(email) and UserTable.passwordHash.eq(passwordHash) })
-            .singleOrNull()
+        val row = transaction {
+            UserTable.select(where = { UserTable.email.eq(email) and UserTable.passwordHash.eq(passwordHash) })
+                .singleOrNull()
+        }
         return row?.let {
             convertRowToUser(it)
         }

@@ -27,13 +27,14 @@ services:
     container_name: db-container
     restart: always
     expose:
-      - 54321
+      - 5432
     networks:
       - default
     volumes:
       - data-volume:/data/db
     ports:
-      - '54321:5432'
+      - '5432:5432'
+
 
 volumes:
   data-volume:

@@ -20,6 +20,8 @@ Setting up the hemdaal (API + backend + DB):
     `docker build -t hemdaal_api`
 2. Up the Docker command `docker-compose up`
 
+http://0.0.0.0:8080/graphql-playground
+
 For Setting up the hemdaal Frontend/UI Please follow the below link
     
     TODO

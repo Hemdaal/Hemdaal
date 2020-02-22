@@ -4,23 +4,31 @@ import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.transactions.transaction
 
 class DatabaseFactory(
     private val dbUrl: String,
+    private val dbPort: String,
     private val dbUser: String,
     private val dbPassword: String
 ) {
 
     init {
         Database.connect(hikari())
-        val flyway = Flyway.configure().dataSource(dbUrl, dbUser, dbPassword).load()
+        val dbHost = "jdbc:postgresql://$dbUrl:$dbPort/hemdaal"
+        val flyway = Flyway.configure().dataSource(dbHost, dbUser, dbPassword).load()
         flyway.migrate()
+
+        transaction {
+            SchemaUtils.create(UserTable, OrgUserAccessTable, OrganisationTable, ProjectTable)
+        }
     }
 
     private fun hikari(): HikariDataSource {
         val config = HikariConfig()
         config.driverClassName = "org.postgresql.Driver"
-        config.jdbcUrl = dbUrl
+        config.jdbcUrl = "jdbc:postgresql://$dbUrl:$dbPort/hemdaal"
         config.username = dbUser
         config.password = dbPassword
         config.maximumPoolSize = 3
@@ -29,5 +37,4 @@ class DatabaseFactory(
         config.validate()
         return HikariDataSource(config)
     }
-
 }

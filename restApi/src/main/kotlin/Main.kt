@@ -1,5 +1,6 @@
 package main.kotlin
 
+import InitService
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
@@ -14,7 +15,9 @@ import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import main.kotlin.auth.installAuth
+import main.kotlin.di.injectionModule
 import main.kotlin.graphql.installGraphQL
+import org.koin.ktor.ext.Koin
 
 fun main(args: Array<String>) {
     embeddedServer(
@@ -26,8 +29,19 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
+
+    InitService().init(
+        ApplicationConfig.DB_HOST,
+        ApplicationConfig.DB_PORT,
+        ApplicationConfig.DB_USER_NAME,
+        ApplicationConfig.DB_PASSWORD
+    )
+
     install(DefaultHeaders)
     install(CallLogging)
+    install(Koin) {
+        modules(injectionModule)
+    }
     install(ContentNegotiation) {
         gson {
             setPrettyPrinting()
