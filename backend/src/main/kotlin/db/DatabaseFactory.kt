@@ -11,7 +11,7 @@ class DatabaseFactory(
     private val dbPassword: String
 ) {
 
-    fun init() {
+    init {
         Database.connect(hikari())
         val flyway = Flyway.configure().dataSource(dbUrl, dbUser, dbPassword).load()
         flyway.migrate()

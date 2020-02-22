@@ -4,9 +4,11 @@ import repositories.OrgAccessRepository
 import repositories.OrganisationRepository
 import repositories.ProjectRepository
 import repositories.UserRepository
+import utils.HashUtils
 
 object ServiceLocator {
 
+    const val HASH_UTILS = "hash_utils"
     const val ORG_ACCESS_REPOSITORY = "org_access_repository"
     const val USER_REPOSITORY = "user_repository"
     const val PROJECT_REPOSITORY = "project_repository"
@@ -24,6 +26,7 @@ object ServiceLocator {
             ORG_REPOSITORY -> OrganisationRepository() as T
             USER_REPOSITORY -> UserRepository() as T
             ORG_ACCESS_REPOSITORY -> OrgAccessRepository() as T
+            HASH_UTILS -> HashUtils as T
             else -> throw IllegalArgumentException("unidentified tag")
         }
     }

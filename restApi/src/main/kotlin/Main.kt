@@ -13,17 +13,19 @@ import io.ktor.routing.get
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
+import main.kotlin.auth.installAuth
+import main.kotlin.graphql.installGraphQL
 
 fun main(args: Array<String>) {
     embeddedServer(
         Netty,
         watchPaths = listOf(""),
         port = 8080,
-        module = Application::main
+        module = Application::module
     ).apply { start(wait = true) }
 }
 
-fun Application.main() {
+fun Application.module() {
     install(DefaultHeaders)
     install(CallLogging)
     install(ContentNegotiation) {
@@ -31,6 +33,9 @@ fun Application.main() {
             setPrettyPrinting()
         }
     }
+    installAuth()
+    installGraphQL()
+
     routing {
         get("/") {
             call.respondText("Hemdaal API Working! Success.", ContentType.Text.Plain)
