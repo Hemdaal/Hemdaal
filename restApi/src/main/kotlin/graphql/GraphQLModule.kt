@@ -17,6 +17,8 @@ import io.ktor.response.respond
 import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.routing
+import main.kotlin.auth.BASIC_AUTH
+import main.kotlin.auth.SESSION_AUTH
 import main.kotlin.graphql.queries.UserQuery
 import org.koin.ktor.ext.inject
 
@@ -49,7 +51,7 @@ fun Application.installGraphQL() {
     }
 
     routing {
-        authenticate("session_auth") {
+        authenticate(SESSION_AUTH, BASIC_AUTH) {
             post("/graphql") {
                 call.executeQuery()
             }
