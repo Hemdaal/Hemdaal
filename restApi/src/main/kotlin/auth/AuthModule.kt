@@ -60,7 +60,7 @@ fun Application.installAuth() {
 
         jwt(name = JWT_AUTH) {
             realm = REALM
-            verifier(jwtTokenManager.getJWKProvider(), jwtTokenManager.getIssuer())
+            verifier(jwtTokenManager.verifier)
             validate { credential ->
                 val email = jwtTokenManager.getEmailFromJwt(credential.payload.claims)
                 email?.let {
