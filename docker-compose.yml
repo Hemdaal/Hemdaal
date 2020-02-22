@@ -1,7 +1,9 @@
 version: '3'
 services:
-  restApi:
-    image: hemdaal_api:latest
+  rest_api:
+    build:
+      context: ./Docker
+      dockerfile: hemdaal.Dockerfile
     container_name: hemdaal-api-container
     expose:
       - 8080
@@ -23,7 +25,9 @@ services:
       - ./ssl/:/etc/ssl/
 
   database:
-    image: postgres:9.6.0
+    build:
+      context: ./Docker
+      dockerfile: db.Dockerfile
     container_name: db-container
     restart: always
     expose:

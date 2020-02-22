@@ -14,12 +14,13 @@ class DatabaseFactory(
     private val dbPassword: String
 ) {
 
+    private val dbHost = "jdbc:postgresql://$dbUrl:$dbPort/hemdaal_db"
+
     init {
-        Database.connect(hikari())
-        val dbHost = "jdbc:postgresql://$dbUrl:$dbPort/hemdaal"
         val flyway = Flyway.configure().dataSource(dbHost, dbUser, dbPassword).load()
         flyway.migrate()
 
+        Database.connect(hikari())
         transaction {
             SchemaUtils.create(UserTable, OrgUserAccessTable, OrganisationTable, ProjectTable)
         }
@@ -28,7 +29,7 @@ class DatabaseFactory(
     private fun hikari(): HikariDataSource {
         val config = HikariConfig()
         config.driverClassName = "org.postgresql.Driver"
-        config.jdbcUrl = "jdbc:postgresql://$dbUrl:$dbPort/hemdaal"
+        config.jdbcUrl = dbHost
         config.username = dbUser
         config.password = dbPassword
         config.maximumPoolSize = 3

@@ -42,7 +42,7 @@ class JWTTokenManager {
         try {
             val verifier: JWTVerifier = JWT.require(signingAlgorithm)
                 .withIssuer(issuer)
-                .build() //Reusable verifier instance
+                .build()
 
             val jwt: DecodedJWT = verifier.verify(token)
             return jwt.getClaim(emailKey).asString()
