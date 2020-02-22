@@ -10,9 +10,9 @@ data class Organisation(
     val name: String
 ) {
 
-    private val projectRepository: ProjectRepository = ServiceLocator.get(ServiceLocator.PROJECT_REPOSITORY)
-    private val userRepository: UserRepository = ServiceLocator.get(ServiceLocator.USER_REPOSITORY)
-    private val orgAccessRepository: OrgAccessRepository = ServiceLocator.get(ServiceLocator.ORG_ACCESS_REPOSITORY)
+    private val projectRepository: ProjectRepository = ServiceLocator.projectRepository
+    private val userRepository: UserRepository = ServiceLocator.userRepository
+    private val orgAccessRepository: OrgAccessRepository = ServiceLocator.orgAccessRepository
 
     fun getProjects(): List<Project> {
         return projectRepository.getOrganisationProjects(id) ?: emptyList()

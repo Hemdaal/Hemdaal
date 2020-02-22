@@ -1,6 +1,7 @@
 package main.kotlin
 
 import InitService
+import di.hemdaalInjectionModule
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
@@ -40,7 +41,7 @@ fun Application.module() {
     install(DefaultHeaders)
     install(CallLogging)
     install(Koin) {
-        modules(injectionModule)
+        modules(listOf(injectionModule, hemdaalInjectionModule))
     }
     install(ContentNegotiation) {
         gson {

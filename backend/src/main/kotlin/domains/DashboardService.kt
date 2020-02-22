@@ -4,8 +4,7 @@ import ServiceLocator
 import repositories.OrganisationRepository
 
 class DashboardService {
-
-    private val organisationRepository: OrganisationRepository = ServiceLocator.get(ServiceLocator.ORG_REPOSITORY)
+    private val organisationRepository: OrganisationRepository = ServiceLocator.organisationRepository
 
     fun getOrganisationBy(id: Long): Organisation? {
         return organisationRepository.getOrganisationBy(id)

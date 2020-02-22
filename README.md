@@ -22,6 +22,8 @@ Setting up the hemdaal (API + backend + DB):
 
 http://0.0.0.0:8080/graphql-playground
 
+https://documenter.getpostman.com/view/132932/SzKVQcz3
+
 For Setting up the hemdaal Frontend/UI Please follow the below link
+
     
-    TODO

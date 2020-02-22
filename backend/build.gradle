@@ -37,4 +37,5 @@ dependencies {
     implementation 'com.zaxxer:HikariCP:3.4.2'
     implementation "org.postgresql:postgresql:42.2.2"
     implementation "org.flywaydb:flyway-core:5.2.4"
+    implementation 'org.koin:koin-ktor:2.0.1'
 }

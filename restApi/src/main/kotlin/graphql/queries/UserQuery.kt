@@ -18,7 +18,7 @@ class UserQuery(private val userService: UserService) {
         if (email != null) {
             return userService.getUserBy(email)?.let { User(it) }
         }
-        return User(1, "a", "b")
+        return null
     }
 
     fun login(@GraphQLContext context: GraphQLCallContext, email: String, password: String): User {

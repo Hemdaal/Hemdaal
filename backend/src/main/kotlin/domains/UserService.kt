@@ -6,8 +6,8 @@ import utils.HashUtils
 
 class UserService {
 
-    private val userRepository: UserRepository = ServiceLocator.get(ServiceLocator.USER_REPOSITORY)
-    private val hashUtils: HashUtils = ServiceLocator.get(ServiceLocator.HASH_UTILS)
+    private val userRepository: UserRepository = ServiceLocator.userRepository
+    private val hashUtils: HashUtils = ServiceLocator.hashUtils
 
     fun createUser(name: String, email: String, password: String): Boolean {
         if (userRepository.isEmailExist(email)) {
