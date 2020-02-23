@@ -16,4 +16,17 @@ class User(
         val orgIds = orgAccessRepository.getOrganisations(userId = id)
         return organisationRepository.getOrganisationBy(orgIds)
     }
+
+    fun createOrganisation(name: String): Organisation? {
+        val organisation = organisationRepository.createOrganisation(name)
+        organisation?.let {
+            orgAccessRepository.createUserAccess(
+                userId = id,
+                orgId = organisation.id,
+                scopes = allScopes()
+            )
+        }
+
+        return organisation
+    }
 }

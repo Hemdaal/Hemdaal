@@ -3,17 +3,17 @@ package repositories
 import db.OrganisationTable
 import domains.Organisation
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class OrganisationRepository {
 
     fun getOrganisationBy(id: Long): Organisation? {
-        val orgRow = transaction {
-            OrganisationTable.select(where = { OrganisationTable.id eq id }).singleOrNull()
-        }
-        return orgRow?.let {
-            convertRowToOrganisation(orgRow)
+        return transaction {
+            OrganisationTable.select(where = { OrganisationTable.id eq id }).singleOrNull()?.let {
+                convertRowToOrganisation(it)
+            }
         }
     }
 
@@ -26,11 +26,19 @@ class OrganisationRepository {
     }
 
     fun getOrganisationBy(name: String): Organisation? {
-        val orgRow = transaction {
-            OrganisationTable.select(where = { OrganisationTable.name eq name }).singleOrNull()
+        return transaction {
+            OrganisationTable.select(where = { OrganisationTable.name eq name }).singleOrNull()?.let {
+                convertRowToOrganisation(it)
+            }
         }
-        return orgRow?.let {
-            convertRowToOrganisation(orgRow)
+    }
+
+    fun createOrganisation(name: String): Organisation? {
+        return transaction {
+            OrganisationTable.insert {
+                it[OrganisationTable.name] = name
+            }
+            getOrganisationBy(name)
         }
     }
 
@@ -38,4 +46,5 @@ class OrganisationRepository {
         id = row[OrganisationTable.id],
         name = row[OrganisationTable.name]
     )
+
 }

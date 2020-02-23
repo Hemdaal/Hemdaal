@@ -3,6 +3,7 @@ package repositories
 import db.OrgUserAccessTable
 import domains.Scope
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -23,6 +24,16 @@ class OrgAccessRepository {
         return transaction {
             OrgUserAccessTable.select(where = { OrgUserAccessTable.userId eq userId }).mapNotNull {
                 it[OrgUserAccessTable.orgId]
+            }
+        }
+    }
+
+    fun createUserAccess(userId: Long, orgId: Long, scopes: List<Scope>) {
+        return transaction {
+            OrgUserAccessTable.insert {
+                it[OrgUserAccessTable.orgId] = orgId
+                it[OrgUserAccessTable.userId] = userId
+                it[OrgUserAccessTable.scopes] = scopes.joinToString(",")
             }
         }
     }

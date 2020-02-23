@@ -34,7 +34,7 @@ fun Application.installGraphQL() {
             userQuery
         )
     )
-    val schema: GraphQLSchema = toSchema(config = config, queries = queries)
+    val schema: GraphQLSchema = toSchema(config = config, queries = queries, mutations = queries)
     val graphQL = GraphQL.newGraphQL(schema).build()
 
     suspend fun ApplicationCall.executeQuery() {
