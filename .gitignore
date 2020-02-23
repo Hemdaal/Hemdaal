@@ -1,2 +1,4 @@
 .gradle
 .idea
+/backend/build/
+/restApi/build/
