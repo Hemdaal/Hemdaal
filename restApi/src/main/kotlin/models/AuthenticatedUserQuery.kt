@@ -6,7 +6,7 @@ import io.ktor.auth.UserIdPrincipal
 import io.ktor.auth.principal
 import main.kotlin.graphql.GraphQLCallContext
 
-class UserQuery(private val userService: UserService) {
+class AuthenticatedUserQuery(private val userService: UserService) {
 
     fun me(@GraphQLContext context: GraphQLCallContext): UserInfo? {
         val email = context.call.principal<UserIdPrincipal>()?.name

@@ -14,28 +14,51 @@ import io.ktor.http.content.defaultResource
 import io.ktor.http.content.static
 import io.ktor.request.receive
 import io.ktor.response.respond
-import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.routing
 import main.kotlin.auth.BASIC_AUTH
 import main.kotlin.auth.JWT_AUTH
 import main.kotlin.auth.SESSION_AUTH
-import main.kotlin.models.UserQuery
+import main.kotlin.models.AuthenticatedUserQuery
+import main.kotlin.models.UserCreationQuery
 import org.koin.ktor.ext.inject
 
 data class GraphQLRequest(val query: String?, val operationName: String?, val variables: Map<String, Any>?)
 
 fun Application.installGraphQL() {
-    val userQuery: UserQuery by inject()
+    val authenticatedUserQuery: AuthenticatedUserQuery by inject()
+    val userCreationQuery: UserCreationQuery by inject()
 
     val config = SchemaGeneratorConfig(listOf("main.kotlin.models"))
-    val queries = listOf(
+    val authenticatedQueries = listOf(
         TopLevelObject(
-            userQuery
+            authenticatedUserQuery
         )
     )
-    val schema: GraphQLSchema = toSchema(config = config, queries = queries, mutations = queries)
-    val graphQL = GraphQL.newGraphQL(schema).build()
+    val userCreationQueries = listOf(
+        TopLevelObject(
+            userCreationQuery
+        )
+    )
+
+    val authenticatedSchema: GraphQLSchema =
+        toSchema(config = config, queries = authenticatedQueries, mutations = authenticatedQueries)
+    val userCreationSchema: GraphQLSchema =
+        toSchema(config = config, queries = userCreationQueries, mutations = userCreationQueries)
+    val authenticatedGraphQL = GraphQL.newGraphQL(authenticatedSchema).build()
+    val userCreationGraphQL = GraphQL.newGraphQL(userCreationSchema).build()
+
+    suspend fun ApplicationCall.executeAuthenticatedQuery() {
+        val request = receive<GraphQLRequest>()
+        val executionInput = ExecutionInput.newExecutionInput()
+            .context(GraphQLCallContext(this))
+            .query(request.query)
+            .operationName(request.operationName)
+            .variables(request.variables)
+            .build()
+
+        respond(authenticatedGraphQL.execute(executionInput))
+    }
 
     suspend fun ApplicationCall.executeQuery() {
         val request = receive<GraphQLRequest>()
@@ -46,20 +69,17 @@ fun Application.installGraphQL() {
             .variables(request.variables)
             .build()
 
-        graphQL.execute(executionInput)
-
-        respond(graphQL.execute(executionInput))
+        respond(userCreationGraphQL.execute(executionInput))
     }
 
     routing {
         authenticate(SESSION_AUTH, JWT_AUTH, BASIC_AUTH) {
             post("/graphql") {
-                call.executeQuery()
+                call.executeAuthenticatedQuery()
             }
-
-            get("/graphql") {
-                call.executeQuery()
-            }
+        }
+        post("/user") {
+            call.executeQuery()
         }
 
         static("/graphql-playground") {
