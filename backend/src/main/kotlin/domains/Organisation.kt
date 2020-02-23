@@ -5,7 +5,7 @@ import repositories.OrgAccessRepository
 import repositories.ProjectRepository
 import repositories.UserRepository
 
-data class Organisation(
+class Organisation(
     val id: Long,
     val name: String
 ) {

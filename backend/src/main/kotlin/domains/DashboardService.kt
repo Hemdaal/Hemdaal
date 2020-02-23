@@ -10,10 +10,6 @@ class DashboardService {
         return organisationRepository.getOrganisationBy(id)
     }
 
-    fun getOrganisationBy(name: String): Organisation? {
-        return organisationRepository.getOrganisationBy(name)
-    }
-
     fun createOrganisation(name: String, user: User) {
 
     }

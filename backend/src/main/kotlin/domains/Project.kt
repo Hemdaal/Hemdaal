@@ -1,6 +1,6 @@
 package domains
 
-data class Project(
+class Project(
     val id: Long,
     val name: String
 )

@@ -1,7 +1,7 @@
 package main.kotlin.di
 
 import main.kotlin.auth.JWTTokenManager
-import main.kotlin.graphql.queries.UserQuery
+import main.kotlin.models.UserQuery
 import org.koin.dsl.module
 
 val injectionModule = module {
