@@ -1,7 +1,6 @@
 package repositories
 
 import db.CollaboratorTable
-import db.UserTable
 import domains.Collaborator
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
@@ -34,10 +33,10 @@ class CollaboratorRepository {
         return transaction {
             CollaboratorTable.select(where = { CollaboratorTable.email eq email }).singleOrNull()?.let {
                 convertRowToCollaborator(it)
-            }.let {
+            } ?: let {
                 CollaboratorTable.insert {
-                    it[UserTable.name] = name.trim()
-                    it[UserTable.email] = email.trim()
+                    it[CollaboratorTable.name] = name.trim()
+                    it[CollaboratorTable.email] = email.trim()
                 }.let {
                     convertRowToCollaborator(it)
                 }

@@ -17,8 +17,8 @@ object OrganisationTable : Table(name = "organisation") {
 
 object CollaboratorTable : Table(name = "collaborator") {
     val id: Column<Long> = long("id").autoIncrement().primaryKey()
-    val name: Column<String> = UserTable.varchar("name", 100)
-    val email: Column<String> = UserTable.varchar("email", 100).uniqueIndex()
+    val name: Column<String> = varchar("name", 100)
+    val email: Column<String> = varchar("email", 100).uniqueIndex()
 }
 
 object OrgCollaboratorTable : Table(name = "org_collaborator") {
