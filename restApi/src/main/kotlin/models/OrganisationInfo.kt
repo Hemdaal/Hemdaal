@@ -16,9 +16,19 @@ data class OrganisationInfo(
         }
     }
 
-    fun users(@GraphQLContext context: GraphQLCallContext): List<UserInfo> {
-        return Organisation(id, name).getUsers().map {
-            UserInfo(it.key)
+    fun collaborators(@GraphQLContext context: GraphQLCallContext): List<CollaboratorInfo> {
+        return Organisation(id, name).getCollaborators().map {
+            CollaboratorInfo(it.key)
+        }
+    }
+
+    fun addCollaborator(
+        @GraphQLContext context: GraphQLCallContext,
+        userName: String,
+        userEmail: String
+    ): CollaboratorInfo {
+        return Organisation(id, name).addCollaborator(userName, userEmail).let {
+            CollaboratorInfo(it)
         }
     }
 }

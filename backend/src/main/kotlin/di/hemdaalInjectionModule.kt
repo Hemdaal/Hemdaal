@@ -2,10 +2,7 @@ package di
 
 import domains.UserService
 import org.koin.dsl.module
-import repositories.OrgAccessRepository
-import repositories.OrganisationRepository
-import repositories.ProjectRepository
-import repositories.UserRepository
+import repositories.*
 import utils.HashUtils
 
 val hemdaalInjectionModule = module {
@@ -13,6 +10,7 @@ val hemdaalInjectionModule = module {
     single { ProjectRepository() }
     single { OrganisationRepository() }
     single { UserRepository() }
-    single { OrgAccessRepository() }
+    single { OrgCollaboratorRepository() }
     single { HashUtils() }
+    single { CollaboratorRepository() }
 }

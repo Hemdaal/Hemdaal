@@ -1,9 +1,9 @@
 package domains
 
 import ServiceLocator
-import repositories.OrgAccessRepository
+import repositories.CollaboratorRepository
+import repositories.OrgCollaboratorRepository
 import repositories.ProjectRepository
-import repositories.UserRepository
 
 class Organisation(
     val id: Long,
@@ -11,16 +11,26 @@ class Organisation(
 ) {
 
     private val projectRepository: ProjectRepository = ServiceLocator.projectRepository
-    private val userRepository: UserRepository = ServiceLocator.userRepository
-    private val orgAccessRepository: OrgAccessRepository = ServiceLocator.orgAccessRepository
+    private val collaboratorRepository: CollaboratorRepository = ServiceLocator.collaboratorRepository
+    private val orgCollaboratorRepository: OrgCollaboratorRepository = ServiceLocator.orgAccessRepository
 
     fun getProjects(): List<Project> {
         return projectRepository.getOrganisationProjects(id) ?: emptyList()
     }
 
-    fun getUsers(): Map<User, List<Scope>> {
-        val userIdScopeMap = orgAccessRepository.getUserAccess(id)
-        val users = userRepository.getUserBy(userIdScopeMap.keys.toList())
-        return users.associateWith { (userIdScopeMap[it.id] ?: emptyList()) }
+    fun getCollaborators(): Map<Collaborator, List<Scope>> {
+        val colIdScopeMap = orgCollaboratorRepository.getCollaboratorAccess(id)
+        val collaborators = collaboratorRepository.getCollaboratorBy(colIdScopeMap.keys.toList())
+        return collaborators.associateWith { (colIdScopeMap[it.id] ?: emptyList()) }
+    }
+
+    fun createProject(name: String) {
+        projectRepository.createProject(name, id)
+    }
+
+    fun addCollaborator(name: String, email: String): Collaborator {
+        val collaborator = collaboratorRepository.getOrCreateCollaborator(name, email)
+        orgCollaboratorRepository.createCollaboratorAccess(collaborator.id, id, emptyList())
+        return collaborator
     }
 }

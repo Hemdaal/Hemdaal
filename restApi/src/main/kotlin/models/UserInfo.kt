@@ -11,9 +11,10 @@ import main.kotlin.graphql.GraphQLCallContext
 data class UserInfo(
     @SerializedName("id") val id: Long,
     @SerializedName("name") val name: String,
-    @SerializedName("email") val email: String
+    @SerializedName("email") val email: String,
+    @SerializedName("jwt_token") val token: String
 ) {
-    constructor(user: User) : this(user.id, user.name, user.email)
+    constructor(user: User, token: String) : this(user.id, user.name, user.email, token)
 
     fun organisations(@GraphQLContext context: GraphQLCallContext): List<OrganisationInfo> {
         return User(id, name, email).getOrganisations().map {

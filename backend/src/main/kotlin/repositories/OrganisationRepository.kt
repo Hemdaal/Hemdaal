@@ -5,6 +5,7 @@ import domains.Organisation
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.statements.InsertStatement
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class OrganisationRepository {
@@ -37,10 +38,16 @@ class OrganisationRepository {
         return transaction {
             OrganisationTable.insert {
                 it[OrganisationTable.name] = name
+            }.let {
+                convertRowToOrganisation(it)
             }
-            getOrganisationBy(name)
         }
     }
+
+    private fun convertRowToOrganisation(row: InsertStatement<Number>) = Organisation(
+        id = row[OrganisationTable.id],
+        name = row[OrganisationTable.name]
+    )
 
     private fun convertRowToOrganisation(row: ResultRow) = Organisation(
         id = row[OrganisationTable.id],

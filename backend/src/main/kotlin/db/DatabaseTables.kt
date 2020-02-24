@@ -15,9 +15,15 @@ object OrganisationTable : Table(name = "organisation") {
     val name: Column<String> = varchar("name", 100)
 }
 
-object OrgUserAccessTable : Table(name = "org_user_access") {
+object CollaboratorTable : Table(name = "collaborator") {
     val id: Column<Long> = long("id").autoIncrement().primaryKey()
-    val userId: Column<Long> = long("user_id").references(UserTable.id)
+    val name: Column<String> = UserTable.varchar("name", 100)
+    val email: Column<String> = UserTable.varchar("email", 100).uniqueIndex()
+}
+
+object OrgCollaboratorTable : Table(name = "org_collaborator") {
+    val id: Column<Long> = long("id").autoIncrement().primaryKey()
+    val colId: Column<Long> = long("col_id").references(CollaboratorTable.id)
     val orgId: Column<Long> = long("org_id").references(OrganisationTable.id)
     val scopes: Column<String> = varchar("scopes", 1000)
 }

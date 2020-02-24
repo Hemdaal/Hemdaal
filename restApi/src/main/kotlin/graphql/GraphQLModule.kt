@@ -19,8 +19,6 @@ import io.ktor.routing.routing
 import main.kotlin.auth.BASIC_AUTH
 import main.kotlin.auth.JWT_AUTH
 import main.kotlin.auth.SESSION_AUTH
-import main.kotlin.models.AuthenticatedUserQuery
-import main.kotlin.models.UserCreationQuery
 import org.koin.ktor.ext.inject
 
 data class GraphQLRequest(val query: String?, val operationName: String?, val variables: Map<String, Any>?)

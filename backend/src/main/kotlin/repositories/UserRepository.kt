@@ -10,14 +10,6 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 class UserRepository {
 
-    fun getUserBy(ids: List<Long>): List<User> {
-        return transaction {
-            UserTable.select(where = { UserTable.id inList ids }).mapNotNull {
-                convertRowToUser(it)
-            }
-        }
-    }
-
     fun createUser(
         name: String,
         email: String,
@@ -37,21 +29,19 @@ class UserRepository {
     }
 
     fun returnUserByEmail(email: String): User? {
-        val row = transaction {
-            UserTable.select(where = { UserTable.email.eq(email) }).singleOrNull()
-        }
-        return row?.let {
-            convertRowToUser(it)
+        return transaction {
+            UserTable.select(where = { UserTable.email.eq(email) }).singleOrNull()?.let {
+                convertRowToUser(it)
+            }
         }
     }
 
     fun returnUserByCheckingEmailAndPassword(email: String, passwordHash: String): User? {
-        val row = transaction {
+        return transaction {
             UserTable.select(where = { UserTable.email.eq(email) and UserTable.passwordHash.eq(passwordHash) })
-                .singleOrNull()
-        }
-        return row?.let {
-            convertRowToUser(it)
+                .singleOrNull()?.let {
+                    convertRowToUser(it)
+                }
         }
     }
 

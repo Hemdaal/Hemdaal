@@ -22,7 +22,7 @@ class DatabaseFactory(
 
         Database.connect(hikari())
         transaction {
-            SchemaUtils.create(UserTable, OrgUserAccessTable, OrganisationTable, ProjectTable)
+            SchemaUtils.create(UserTable, OrgCollaboratorTable, CollaboratorTable, OrganisationTable, ProjectTable)
         }
     }
 
