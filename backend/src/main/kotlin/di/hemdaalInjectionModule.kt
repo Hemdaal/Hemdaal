@@ -1,8 +1,8 @@
 package di
 
-import domains.UserService
 import org.koin.dsl.module
 import repositories.*
+import services.UserService
 import utils.HashUtils
 
 val hemdaalInjectionModule = module {
@@ -13,4 +13,5 @@ val hemdaalInjectionModule = module {
     single { OrgCollaboratorRepository() }
     single { HashUtils() }
     single { CollaboratorRepository() }
+    single { MetricRepository() }
 }

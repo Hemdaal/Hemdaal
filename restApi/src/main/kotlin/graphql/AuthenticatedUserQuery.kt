@@ -1,11 +1,11 @@
 package main.kotlin.graphql
 
 import com.expedia.graphql.annotations.GraphQLContext
-import domains.UserService
 import io.ktor.auth.UserIdPrincipal
 import io.ktor.auth.principal
 import main.kotlin.auth.JWTTokenManager
 import main.kotlin.models.UserInfo
+import services.UserService
 
 class AuthenticatedUserQuery(
     private val userService: UserService,

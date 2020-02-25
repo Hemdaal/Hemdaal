@@ -1,6 +1,5 @@
 package main.kotlin.auth
 
-import domains.UserService
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.auth.Authentication
@@ -12,6 +11,7 @@ import io.ktor.sessions.Sessions
 import io.ktor.sessions.cookie
 import io.ktor.sessions.sessions
 import org.koin.ktor.ext.inject
+import services.UserService
 
 const val BASIC_AUTH = "basic_auth"
 const val JWT_AUTH = "jwt_auth"

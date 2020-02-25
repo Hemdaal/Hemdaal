@@ -1,3 +1,0 @@
-package domains
-
-class MetricComponent

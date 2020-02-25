@@ -1,6 +1,7 @@
-package domains
+package services
 
 import ServiceLocator
+import domains.User
 import repositories.UserRepository
 import utils.HashUtils
 

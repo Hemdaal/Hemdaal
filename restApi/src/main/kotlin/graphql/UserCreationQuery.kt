@@ -1,9 +1,9 @@
 package main.kotlin.graphql
 
 import com.expedia.graphql.annotations.GraphQLContext
-import domains.UserService
 import main.kotlin.auth.JWTTokenManager
 import main.kotlin.models.UserInfo
+import services.UserService
 
 class UserCreationQuery(
     private val userService: UserService,

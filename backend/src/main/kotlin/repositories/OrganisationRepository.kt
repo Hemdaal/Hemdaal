@@ -10,14 +10,6 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 class OrganisationRepository {
 
-    fun getOrganisationBy(id: Long): Organisation? {
-        return transaction {
-            OrganisationTable.select(where = { OrganisationTable.id eq id }).singleOrNull()?.let {
-                convertRowToOrganisation(it)
-            }
-        }
-    }
-
     fun getOrganisationBy(ids: List<Long>): List<Organisation> {
         return transaction {
             OrganisationTable.select(where = { OrganisationTable.id inList ids }).mapNotNull {
@@ -26,15 +18,7 @@ class OrganisationRepository {
         }
     }
 
-    fun getOrganisationBy(name: String): Organisation? {
-        return transaction {
-            OrganisationTable.select(where = { OrganisationTable.name eq name }).singleOrNull()?.let {
-                convertRowToOrganisation(it)
-            }
-        }
-    }
-
-    fun createOrganisation(name: String): Organisation? {
+    fun createOrganisation(name: String): Organisation {
         return transaction {
             OrganisationTable.insert {
                 it[OrganisationTable.name] = name

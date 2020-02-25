@@ -1,21 +1,14 @@
 package domains
 
-import domains.metriccollectors.MetricCollector
-import domains.metriccollectors.MetricCollectorType
+import domains.metric.MetricCollectorInfo
+import domains.metric.MetricType
 
 class SoftwareComponent(
+    val id: Long,
     val name: String
 ) {
 
-    fun getMetricCollectors(): List<MetricCollector> {
-        return emptyList()
-    }
-
-    fun addMetricCollector(
-        resourceUrl: String,
-        authInfo: MetricAuthInfo,
-        type: MetricCollectorType
-    ) {
+    fun addMetricComponent(metricType: MetricType, metricCollectorInfo: MetricCollectorInfo) {
 
     }
 }
