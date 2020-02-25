@@ -1,6 +1,7 @@
-package domains.metriccollectors
+package collectors
 
 import domains.MetricAuthInfo
+import domains.metriccollectors.MetricCollector
 
 class GithubMetricCollector(
     resourceUrl: String,
