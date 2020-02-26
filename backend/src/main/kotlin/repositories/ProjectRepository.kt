@@ -10,19 +10,18 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 class ProjectRepository {
 
-    fun getOrganisationProjects(orgId: Long): List<Project>? {
+    fun getProjectsBy(projectIds: List<Long>): List<Project> {
         return transaction {
-            ProjectTable.select(where = { ProjectTable.organisationId eq orgId }).mapNotNull {
+            ProjectTable.select(where = { ProjectTable.id inList projectIds }).mapNotNull {
                 createProjectFrom(it)
             }
         }
     }
 
-    fun createProject(name: String, orgId: Long) {
+    fun createProject(name: String): Project {
         return transaction {
             ProjectTable.insert {
                 it[ProjectTable.name] = name
-                it[ProjectTable.organisationId] = orgId
             }.let {
                 createProjectFrom(it)
             }

@@ -10,7 +10,7 @@ object UserTable : Table(name = "user") {
     val passwordHash: Column<String> = varchar("hash", 500)
 }
 
-object OrganisationTable : Table(name = "organisation") {
+object ProjectTable : Table(name = "project") {
     val id: Column<Long> = long("id").autoIncrement().primaryKey()
     val name: Column<String> = varchar("name", 100)
 }
@@ -21,17 +21,11 @@ object CollaboratorTable : Table(name = "collaborator") {
     val email: Column<String> = varchar("email", 100).uniqueIndex()
 }
 
-object OrgCollaboratorTable : Table(name = "org_collaborator") {
+object ProjectCollaboratorTable : Table(name = "project_collaborator") {
     val id: Column<Long> = long("id").autoIncrement().primaryKey()
-    val colId: Column<Long> = long("col_id").references(CollaboratorTable.id)
-    val orgId: Column<Long> = long("org_id").references(OrganisationTable.id)
+    val collaboratorId: Column<Long> = long("collaborator_id").references(CollaboratorTable.id)
+    val projectId: Column<Long> = long("project_id").references(ProjectTable.id)
     val scopes: Column<String> = varchar("scopes", 1000)
-}
-
-object ProjectTable : Table(name = "project") {
-    val id: Column<Long> = long("id").autoIncrement().primaryKey()
-    val name: Column<String> = varchar("name", 100)
-    val organisationId: Column<Long> = long("org_id").references(OrganisationTable.id)
 }
 
 object SoftwareComponentTable : Table(name = "software_component") {

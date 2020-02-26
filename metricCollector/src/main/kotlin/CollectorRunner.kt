@@ -1,5 +1,7 @@
-import collectors.GitHubRepoCollector
+import collectors.RepoCollector
 import domains.metric.CollectorType
+import domains.metric.repo.RepoMetric
+import fetchers.GithubRepoFetcher
 
 class CollectorRunner {
 
@@ -11,7 +13,7 @@ class CollectorRunner {
         metrics.forEach {
             when (it.metricCollectorInfo.collectorType) {
                 CollectorType.GITHUB_REPO -> {
-                    GitHubRepoCollector().collectData()
+                    RepoCollector(GithubRepoFetcher(), it as RepoMetric).collectData()
                 }
             }
         }

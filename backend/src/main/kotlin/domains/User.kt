@@ -2,37 +2,34 @@ package domains
 
 import ServiceLocator
 import repositories.CollaboratorRepository
-import repositories.OrgCollaboratorRepository
-import repositories.OrganisationRepository
+import repositories.ProjectCollaboratorRepository
+import repositories.ProjectRepository
 
 class User(
     val id: Long,
     val name: String,
     val email: String
 ) {
-    private val orgCollaboratorRepository: OrgCollaboratorRepository = ServiceLocator.orgAccessRepository
-    private val organisationRepository: OrganisationRepository = ServiceLocator.organisationRepository
+    private val projectCollaboratorRepository: ProjectCollaboratorRepository = ServiceLocator.orgAccessRepository
+    private val projectRepository: ProjectRepository = ServiceLocator.projectRepository
     private val collaboratorRepository: CollaboratorRepository = ServiceLocator.collaboratorRepository
 
-    fun getOrganisations(): List<Organisation> {
-        val orgIds = orgCollaboratorRepository.getOrganisations(getCollaborator().id)
-        return organisationRepository.getOrganisationBy(orgIds)
+    fun getProjects(): Map<Project, List<Scope>> {
+        return projectCollaboratorRepository.getProjectsWithScope(getCollaborator().id)
     }
 
-    fun getCollaborator(): Collaborator {
+    private fun getCollaborator(): Collaborator {
         return collaboratorRepository.getOrCreateCollaborator(name, email)
     }
 
-    fun createOrganisation(name: String): Organisation? {
-        val organisation = organisationRepository.createOrganisation(name)
-        organisation?.let {
-            orgCollaboratorRepository.createCollaboratorAccess(
-                colId = getCollaborator().id,
-                orgId = organisation.id,
+    fun createProject(name: String): Pair<Project, List<Scope>> {
+        return projectRepository.createProject(name).let {
+            projectCollaboratorRepository.createCollaboratorAccess(
+                collaboratorId = getCollaborator().id,
+                projectId = it.id,
                 scopes = emptyList()
             )
+            Pair(it, emptyList())
         }
-
-        return organisation
     }
 }

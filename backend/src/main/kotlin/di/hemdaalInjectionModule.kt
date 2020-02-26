@@ -8,10 +8,10 @@ import utils.HashUtils
 val hemdaalInjectionModule = module {
     single { UserService() }
     single { ProjectRepository() }
-    single { OrganisationRepository() }
     single { UserRepository() }
-    single { OrgCollaboratorRepository() }
+    single { ProjectCollaboratorRepository() }
     single { HashUtils() }
     single { CollaboratorRepository() }
     single { MetricRepository() }
+    single { SoftwareComponentRepository() }
 }

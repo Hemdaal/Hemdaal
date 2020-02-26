@@ -1,6 +1,11 @@
 package collectors
 
-interface RepoCollector {
+import domains.metric.repo.RepoMetric
 
-    fun collectData()
+class RepoCollector(private val repoDataFetcher: RepoDataFetcher, private val repoMetric: RepoMetric) {
+
+    fun collectData() {
+        val commits = repoDataFetcher.fetchCommits(repoMetric.metricCollectorInfo)
+        repoMetric.addCommits(commits)
+    }
 }

@@ -3,13 +3,9 @@
 class User {
     String name
     String email
-}
 
-class Organisation {
-    String name
-    Map<User, Role> userWithRoles
-    List<Project> projects
-    List<Widget> widgets
+    List<Project> getProjects()
+    createProject(name)
 }
 
 class Role {
@@ -17,17 +13,16 @@ class Role {
     String[] access
 }
 
-Organisation "1" *-- "Many" Role
-Organisation "1" *-- "Many" User
-
 class Project {
     String name
+    Map<User, Role> userWithRoles
     List<SoftwareComponent> softwareComponents
     ProjectManagement projectManagement
     List<Widget> widgets
 }
 
-Organisation "1" *-- "Many" Project
+Project "1" *-- "Many" Role
+User "Many" -- "Many" Project
 
 note right of Project
     1. ProjectManagement to track overall progress and issues.

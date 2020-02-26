@@ -3,8 +3,6 @@ package main.kotlin.models
 import com.expedia.graphql.annotations.GraphQLContext
 import com.google.gson.annotations.SerializedName
 import domains.User
-import io.ktor.auth.UserIdPrincipal
-import io.ktor.auth.principal
 import main.kotlin.graphql.GraphQLCallContext
 
 
@@ -16,21 +14,14 @@ data class UserInfo(
 ) {
     constructor(user: User, token: String) : this(user.id, user.name, user.email, token)
 
-    fun organisations(@GraphQLContext context: GraphQLCallContext): List<OrganisationInfo> {
-        return User(id, name, email).getOrganisations().map {
-            OrganisationInfo(it)
-        }
-    }
-
-    fun createOrganisation(@GraphQLContext context: GraphQLCallContext, name: String): OrganisationInfo? {
-        val email = context.call.principal<UserIdPrincipal>()?.name
-
-        if (email != null) {
-            return User(id, name, email).createOrganisation(name)?.let {
-                OrganisationInfo(it)
-            }
+    fun projects(@GraphQLContext context: GraphQLCallContext): List<ProjectInfo> =
+        User(id, name, email).getProjects().map {
+            ProjectInfo(it.key, it.value)
         }
 
-        return null
+    fun createProject(@GraphQLContext context: GraphQLCallContext, name: String): ProjectInfo {
+        val projectScopePair = User(id, name, email).createProject(name)
+        return ProjectInfo(projectScopePair.first, projectScopePair.second)
     }
+
 }
