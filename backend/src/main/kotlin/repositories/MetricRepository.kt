@@ -3,7 +3,7 @@ package repositories
 import db.MetricTable
 import domains.metric.CollectorType
 import domains.metric.Metric
-import domains.metric.MetricCollectorInfo
+import domains.metric.MetricCollectorData
 import domains.metric.MetricType
 import domains.metric.repo.RepoMetric
 import org.jetbrains.exposed.sql.ResultRow
@@ -14,12 +14,12 @@ import org.jetbrains.exposed.sql.statements.InsertStatement
 
 class MetricRepository {
 
-    fun addMetric(metricType: MetricType, metricCollectorInfo: MetricCollectorInfo, softwareId: Long): Metric {
+    fun addMetric(metricType: MetricType, metricCollectorData: MetricCollectorData, softwareId: Long): Metric {
         return MetricTable.insert {
             it[MetricTable.type] = metricType.name
-            it[MetricTable.resourceUrl] = metricCollectorInfo.resourceUrl
-            it[MetricTable.authToken] = metricCollectorInfo.token
-            it[MetricTable.collectorType] = metricCollectorInfo.collectorType.name
+            it[MetricTable.resourceUrl] = metricCollectorData.resourceUrl
+            it[MetricTable.authToken] = metricCollectorData.token
+            it[MetricTable.collectorType] = metricCollectorData.collectorType.name
             it[MetricTable.lastSynced] = 0L
             it[MetricTable.softwareId] = softwareId
         }.let {
@@ -31,6 +31,12 @@ class MetricRepository {
         return MetricTable.select(where = { MetricTable.softwareId eq softwareId }).mapNotNull {
             convertRowToMetric(it)
         }
+    }
+
+    fun getLastSync(metricId: Long): Long {
+        return MetricTable.select(where = { MetricTable.id eq metricId }).singleOrNull()?.let {
+            it[MetricTable.lastSynced]
+        } ?: 0
     }
 
     fun getNonSyncedMetrics(bufferTime: Long): List<Metric> {
@@ -46,18 +52,16 @@ class MetricRepository {
         val resourceUrl = row[MetricTable.resourceUrl]
         val authToken = row[MetricTable.authToken]
         val collectorType = row[MetricTable.collectorType]
-        val lastSynced = row[MetricTable.lastSynced]
 
         return when (MetricType.valueOf(type)) {
             MetricType.REPO -> {
                 RepoMetric(
                     id,
-                    MetricCollectorInfo(
+                    MetricCollectorData(
                         resourceUrl,
                         authToken,
                         CollectorType.valueOf(collectorType)
-                    ),
-                    lastSynced
+                    )
                 )
             }
         }
@@ -75,7 +79,7 @@ class MetricRepository {
             MetricType.REPO -> {
                 RepoMetric(
                     id,
-                    MetricCollectorInfo(
+                    MetricCollectorData(
                         resourceUrl,
                         authToken,
                         CollectorType.valueOf(collectorType)

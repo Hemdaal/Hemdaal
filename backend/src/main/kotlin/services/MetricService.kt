@@ -1,6 +1,6 @@
 package services
 
-import ServiceLocator
+import di.ServiceLocator
 import domains.metric.Metric
 import repositories.MetricRepository
 

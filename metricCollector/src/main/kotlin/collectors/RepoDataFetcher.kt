@@ -1,10 +1,10 @@
 package collectors
 
-import domains.metric.MetricCollectorInfo
-import domains.metric.repo.Commit
+import domains.metric.MetricCollectorData
+import models.CommitData
 
 interface RepoDataFetcher {
 
-    fun fetchCommits(metricCollectorInfo: MetricCollectorInfo): List<Commit>
+    fun fetchCommits(metricCollectorData: MetricCollectorData): List<CommitData>
 
 }

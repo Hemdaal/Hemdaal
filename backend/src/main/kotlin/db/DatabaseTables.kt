@@ -43,3 +43,10 @@ object MetricTable : Table(name = "metric") {
     val collectorType: Column<String> = varchar("collector_type", 100)
     val softwareId: Column<Long> = long("software_id").references(SoftwareComponentTable.id)
 }
+
+object CommitTable : Table(name = "commit") {
+    val sha: Column<String> = varchar("sha", 1000).primaryKey()
+    val authorId: Column<Long> = long("author_id")
+    val time: Column<Long> = long("time")
+    val metricId: Column<Long> = long("metric_id")
+}

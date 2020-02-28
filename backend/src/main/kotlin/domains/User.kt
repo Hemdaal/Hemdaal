@@ -1,6 +1,6 @@
 package domains
 
-import ServiceLocator
+import di.ServiceLocator
 import repositories.CollaboratorRepository
 import repositories.ProjectCollaboratorRepository
 import repositories.ProjectRepository

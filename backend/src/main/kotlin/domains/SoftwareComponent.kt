@@ -1,14 +1,23 @@
 package domains
 
-import domains.metric.MetricCollectorInfo
+import di.ServiceLocator
+import domains.metric.Metric
+import domains.metric.MetricCollectorData
 import domains.metric.MetricType
+import repositories.MetricRepository
 
 class SoftwareComponent(
     val id: Long,
     val name: String
 ) {
 
-    fun addMetricComponent(metricType: MetricType, metricCollectorInfo: MetricCollectorInfo) {
+    private val metricRepository: MetricRepository = ServiceLocator.metricRepository
 
+    fun addMetricComponent(metricType: MetricType, metricCollectorData: MetricCollectorData): Metric {
+        return metricRepository.addMetric(metricType, metricCollectorData, id)
+    }
+
+    fun getMetrics(): List<Metric> {
+        return metricRepository.getMetrics(id)
     }
 }

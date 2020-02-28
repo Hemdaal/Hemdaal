@@ -1,6 +1,6 @@
 package domains.metric
 
-data class MetricCollectorInfo(
+class MetricCollectorData(
     val resourceUrl: String,
     val token: String,
     val collectorType: CollectorType
