@@ -75,8 +75,8 @@ fun Application.installGraphQL() {
     routing {
         authenticate(BASIC_AUTH, SESSION_AUTH, JWT_AUTH) {
             post("/graphql") {
-                val name = call.principal<UserIdPrincipal>()?.name
-                if (name == "no_auth") {
+                val name = call.principal<UserIdPrincipal>()
+                if (name == null) {
                     call.executeQuery()
                 } else {
                     call.executeAuthenticatedQuery()

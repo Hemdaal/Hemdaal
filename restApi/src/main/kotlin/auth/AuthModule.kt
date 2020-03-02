@@ -33,6 +33,7 @@ fun Application.installAuth() {
     install(Authentication) {
         basic(name = BASIC_AUTH) {
             realm = REALM
+            skipWhen { call -> call.request.headers["Authorization"] == null }
             validate { credentials ->
                 val user = UserService().getUserBy(credentials.name, credentials.password)
                 if (user != null) {
@@ -51,6 +52,7 @@ fun Application.installAuth() {
 
         jwt(name = JWT_AUTH) {
             realm = REALM
+            skipWhen { call -> call.request.headers["Authorization"] == null }
             verifier(jwtTokenManager.verifier)
             validate { credential ->
                 val email = jwtTokenManager.getEmailFromJwt(credential.payload.claims)
@@ -62,9 +64,9 @@ fun Application.installAuth() {
 
         //JWT Based session.
         session<Session>(name = SESSION_AUTH) {
+            skipWhen { call -> call.request.headers["Authorization"] == null }
             validate {
                 val session: Session? = sessions.get(USER_TOKEN_COOKIE) as Session?
-
                 if (session != null) {
                     val token = session.jwtToken
                     val email = jwtTokenManager.verifyToken(token)

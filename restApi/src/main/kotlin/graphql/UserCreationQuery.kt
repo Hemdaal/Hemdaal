@@ -2,6 +2,7 @@ package main.kotlin.graphql
 
 import com.expedia.graphql.annotations.GraphQLContext
 import main.kotlin.auth.JWTTokenManager
+import main.kotlin.models.AuthInfo
 import main.kotlin.models.UserInfo
 import services.UserService
 
@@ -15,11 +16,11 @@ class UserCreationQuery(
         name: String,
         email: String,
         password: String
-    ): UserInfo? {
+    ): AuthInfo? {
         val status = userService.createUser(name, email, password)
         if (status) {
             return userService.getUserBy(email, password)?.let {
-                UserInfo(it, jwtTokenManager.createToken(it) ?: "")
+                AuthInfo(jwtTokenManager.createToken(it) ?: "")
             }
         }
 
