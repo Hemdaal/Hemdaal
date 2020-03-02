@@ -9,7 +9,9 @@ import graphql.schema.GraphQLSchema
 import io.ktor.application.Application
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
+import io.ktor.auth.UserIdPrincipal
 import io.ktor.auth.authenticate
+import io.ktor.auth.principal
 import io.ktor.http.content.defaultResource
 import io.ktor.http.content.static
 import io.ktor.request.receive
@@ -71,13 +73,15 @@ fun Application.installGraphQL() {
     }
 
     routing {
-        authenticate(SESSION_AUTH, JWT_AUTH, BASIC_AUTH) {
+        authenticate(BASIC_AUTH, SESSION_AUTH, JWT_AUTH) {
             post("/graphql") {
-                call.executeAuthenticatedQuery()
+                val name = call.principal<UserIdPrincipal>()?.name
+                if (name == "no_auth") {
+                    call.executeQuery()
+                } else {
+                    call.executeAuthenticatedQuery()
+                }
             }
-        }
-        post("/user") {
-            call.executeQuery()
         }
 
         static("/graphql-playground") {

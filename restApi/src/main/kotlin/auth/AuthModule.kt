@@ -44,7 +44,7 @@ fun Application.installAuth() {
                         null
                     }
                 } else {
-                    null
+                    UserIdPrincipal("no_auth")
                 }
             }
         }
