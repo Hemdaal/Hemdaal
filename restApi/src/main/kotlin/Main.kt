@@ -5,11 +5,14 @@ import di.hemdaalInjectionModule
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
+import io.ktor.features.CORS
 import io.ktor.features.CallLogging
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.DefaultHeaders
 import io.ktor.gson.gson
 import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
 import io.ktor.response.respondText
 import io.ktor.routing.get
 import io.ktor.routing.routing
@@ -26,11 +29,23 @@ fun main(args: Array<String>) {
         watchPaths = listOf(""),
         port = 8080,
         module = Application::module
-    ).apply { start(wait = true) }
+    ).apply {
+        start(wait = true)
+    }
 }
 
 fun Application.module() {
-
+    install(CORS) {
+        method(HttpMethod.Post)
+        header(HttpHeaders.AccessControlAllowOrigin)
+        header(HttpHeaders.Authorization)
+        header(HttpHeaders.Referrer)
+        header(HttpHeaders.ContentType)
+        header(HttpHeaders.Accept)
+        header(HttpHeaders.UserAgent)
+        allowCredentials = true
+        anyHost()
+    }
     InitService().init(
         ApplicationConfig.DB_HOST,
         ApplicationConfig.DB_PORT,
