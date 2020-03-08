@@ -24,13 +24,18 @@ data class ProjectInfo(
         }
     }
 
+    fun createSoftwareComponent(
+        @GraphQLContext context: GraphQLCallContext,
+        softwareComponentName: String
+    ): SoftwareComponentInfo {
+        return SoftwareComponentInfo(Project(id, name).createSoftwareComponent(softwareComponentName))
+    }
+
     fun addCollaborator(
         @GraphQLContext context: GraphQLCallContext,
         userName: String,
         userEmail: String
     ): CollaboratorInfo {
-        return Project(id, name).addCollaborator(userName, userEmail).let {
-            CollaboratorInfo(it)
-        }
+        return CollaboratorInfo(Project(id, name).addCollaborator(userName, userEmail))
     }
 }

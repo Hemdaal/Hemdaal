@@ -21,4 +21,14 @@ class AuthenticatedUserQuery(
         }
         return null
     }
+
+    fun logout(@GraphQLContext context: GraphQLCallContext): Boolean? {
+        val email = context.call.principal<UserIdPrincipal>()?.name
+        if (email != null) {
+            //TODO invalidate id token by puttin it in logout list.
+            return true
+        }
+
+        return null
+    }
 }

@@ -34,6 +34,16 @@ class ProjectCollaboratorRepository {
         }
     }
 
+    fun getProjectWithScope(colId: Long, projectId: Long): Pair<Project, List<Scope>>? {
+        return transaction {
+            ProjectCollaboratorTable.leftJoin(ProjectTable)
+                .select(where = { (ProjectCollaboratorTable.collaboratorId eq colId) and (ProjectCollaboratorTable.projectId eq ProjectTable.id) and (ProjectTable.id eq projectId) })
+                .singleOrNull()?.let {
+                    createProjectFrom(it) to createScopesFrom(it[ProjectCollaboratorTable.scopes])
+                }
+        }
+    }
+
     fun createCollaboratorAccess(collaboratorId: Long, projectId: Long, scopes: List<Scope>) {
         return transaction {
             ProjectCollaboratorTable.insert {

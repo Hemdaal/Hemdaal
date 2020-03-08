@@ -27,7 +27,7 @@ data class GraphQLRequest(val query: String?, val operationName: String?, val va
 
 fun Application.installGraphQL() {
     val authenticatedUserQuery: AuthenticatedUserQuery by inject()
-    val userCreationQuery: UserCreationQuery by inject()
+    val userQuery: UserQuery by inject()
 
     val config = SchemaGeneratorConfig(listOf("main.kotlin.models"))
     val authenticatedQueries = listOf(
@@ -37,7 +37,7 @@ fun Application.installGraphQL() {
     )
     val userCreationQueries = listOf(
         TopLevelObject(
-            userCreationQuery
+            userQuery
         )
     )
 

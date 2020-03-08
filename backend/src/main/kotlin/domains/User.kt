@@ -18,6 +18,10 @@ class User(
         return projectCollaboratorRepository.getProjectsWithScope(getCollaborator().id)
     }
 
+    fun getProject(projectId: Long): Pair<Project, List<Scope>>? {
+        return projectCollaboratorRepository.getProjectWithScope(getCollaborator().id, projectId)
+    }
+
     private fun getCollaborator(): Collaborator {
         return collaboratorRepository.getOrCreateCollaborator(name, email)
     }

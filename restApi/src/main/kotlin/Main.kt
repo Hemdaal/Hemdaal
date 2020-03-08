@@ -3,6 +3,7 @@ package main.kotlin
 import InitService
 import di.hemdaalInjectionModule
 import io.ktor.application.Application
+import io.ktor.application.ApplicationCallPipeline
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.features.CORS
@@ -18,10 +19,12 @@ import io.ktor.routing.get
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
+import kotlinx.coroutines.time.delay
 import main.kotlin.auth.installAuth
 import main.kotlin.di.injectionModule
 import main.kotlin.graphql.installGraphQL
 import org.koin.ktor.ext.Koin
+import java.time.Duration
 
 fun main(args: Array<String>) {
     embeddedServer(
@@ -52,6 +55,9 @@ fun Application.module() {
         ApplicationConfig.DB_USER_NAME,
         ApplicationConfig.DB_PASSWORD
     )
+    intercept(ApplicationCallPipeline.Features) {
+        delay(Duration.ofSeconds(2))
+    }
 
     install(DefaultHeaders)
     install(CallLogging)

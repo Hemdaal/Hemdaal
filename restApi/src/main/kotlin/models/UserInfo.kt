@@ -19,6 +19,12 @@ data class UserInfo(
             ProjectInfo(it.key, it.value)
         }
 
+
+    fun project(@GraphQLContext context: GraphQLCallContext, projectId: Long): ProjectInfo? =
+        User(id, name, email).getProject(projectId)?.let {
+            ProjectInfo(it.first, it.second)
+        }
+
     fun createProject(@GraphQLContext context: GraphQLCallContext, name: String): ProjectInfo {
         val projectScopePair = User(id, name, email).createProject(name)
         return ProjectInfo(projectScopePair.first, projectScopePair.second)

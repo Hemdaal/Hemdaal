@@ -6,7 +6,7 @@ import main.kotlin.models.AuthInfo
 import main.kotlin.models.UserInfo
 import services.UserService
 
-class UserCreationQuery(
+class UserQuery(
     private val userService: UserService,
     private val jwtTokenManager: JWTTokenManager
 ) {
