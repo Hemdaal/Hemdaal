@@ -23,6 +23,15 @@ class Project {
 Project "1" *-- "Many" Role
 User "Many" -- "Many" Project
 
+
+class ProjectManagement {
+    PMTool[type, url, token] tool
+    addFeatures(Feature feature)
+    List<Features> getFeatures(Long startTime)
+}
+
+Project "1" *-- "1" ProjectManagement
+
 class SoftwareComponent {
     String name
     Planning planning
@@ -38,5 +47,22 @@ end note
 
 Project "1" *-- "Many" SoftwareComponent
 
+class CodeManagement {
+    GITTool[type, url, token] tool
+    addCommit(Commit commit)
+    addMergeRequest(MergeRequest mergeRequest)
+    List<Commit> getCommits()
+    List<MergeRequest> getMergeRequests()
+}
+
+SoftwareComponent "1" *-- "1" CodeManagement
+
+class BuildManagement {
+    BuildTool[type, url, token] tool
+    addBuild(Build build)
+    List<Build> getBuilds()
+}
+
+SoftwareComponent "1" *-- "1" BuildManagement
 
 @enduml
