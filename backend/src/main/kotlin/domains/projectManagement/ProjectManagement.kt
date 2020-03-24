@@ -1,6 +1,7 @@
 package domains.projectManagement
 
 class ProjectManagement(
+    val id: Long,
     val tool: PMTool
 ) {
 

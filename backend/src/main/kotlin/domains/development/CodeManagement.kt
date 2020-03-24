@@ -1,6 +1,7 @@
 package domains.development
 
 class CodeManagement(
+    val id: Long,
     val tool: GITTool
 ) {
 

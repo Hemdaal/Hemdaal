@@ -28,7 +28,11 @@ class DatabaseFactory(
                 CollaboratorTable,
                 ProjectTable,
                 SoftwareComponentTable,
-                MetricTable
+                BuildManagementTable,
+                ProjectManagementTable,
+                CodeManagementTable,
+                CommitTable
+
             )
         }
     }

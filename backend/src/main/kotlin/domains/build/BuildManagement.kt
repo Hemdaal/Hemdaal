@@ -1,6 +1,7 @@
 package domains.build
 
 class BuildManagement(
+    val id: Long,
     val buildTool: BuildTool
 ) {
     fun addBuild(build: Build) {

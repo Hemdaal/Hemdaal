@@ -16,7 +16,7 @@ object ServiceLocator : KoinComponent {
     val userRepository by inject<UserRepository>()
     val orgAccessRepository by inject<ProjectCollaboratorRepository>()
     val hashUtils by inject<HashUtils>()
-    val pmToolRepository by inject<PMToolRepository>()
-    val gitToolRepository by inject<GITToolRepository>()
-    val buildToolRepository by inject<BuildToolRepository>()
+    val projectManagementRepository by inject<ProjectManagementRepository>()
+    val codeManagementRepository by inject<CodeManagementRepository>()
+    val buildManagementRepository by inject<BuildManagementRepository>()
 }

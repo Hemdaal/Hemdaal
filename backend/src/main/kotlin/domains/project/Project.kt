@@ -3,7 +3,6 @@ package domains.project
 import di.ServiceLocator
 import domains.Collaborator
 import domains.projectManagement.PMToolType
-import domains.projectManagement.ProjectManagement
 import domains.user.Access
 import repositories.CollaboratorRepository
 import repositories.ProjectCollaboratorRepository
@@ -15,7 +14,7 @@ class Project(
     private val collaboratorRepository: CollaboratorRepository = ServiceLocator.collaboratorRepository
     private val projectCollaboratorRepository: ProjectCollaboratorRepository = ServiceLocator.orgAccessRepository
     private val softwareComponentRepository = ServiceLocator.softwareComponentRepository
-    private val pmToolRepository = ServiceLocator.pmToolRepository
+    private val projectManagementRepository = ServiceLocator.projectManagementRepository
 
     fun getCollaborators(): Map<Collaborator, Access> {
         return projectCollaboratorRepository.getCollaboratorAccess(id)
@@ -39,24 +38,16 @@ class Project(
         return collaborator
     }
 
-    fun getProjectManagement(): ProjectManagement? {
-        return pmToolRepository.getPMTool(id)?.let {
-            ProjectManagement(it)
-        }
-    }
+    fun getProjectManagement() = projectManagementRepository.getProjectManagement(id)
 
     fun setProjectManagement(
         pmToolType: PMToolType,
         toolUrl: String,
         token: String?
-    ): ProjectManagement {
-        return ProjectManagement(
-            pmToolRepository.addPMTool(
-                projectId = id,
-                url = toolUrl,
-                type = pmToolType,
-                token = token
-            )
-        )
-    }
+    ) = projectManagementRepository.addProjectManagement(
+        projectId = id,
+        url = toolUrl,
+        type = pmToolType,
+        token = token
+    )
 }

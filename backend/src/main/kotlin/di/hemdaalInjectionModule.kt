@@ -14,7 +14,7 @@ val hemdaalInjectionModule = module {
     single { CollaboratorRepository() }
     single { SoftwareComponentRepository() }
     single { CommitRepository() }
-    single { PMToolRepository() }
-    single { GITToolRepository() }
-    single { BuildToolRepository() }
+    single { ProjectManagementRepository() }
+    single { CodeManagementRepository() }
+    single { BuildManagementRepository() }
 }

@@ -1,58 +1,52 @@
 package domains.project
 
 import di.ServiceLocator
-import domains.build.BuildManagement
 import domains.build.BuildToolType
-import domains.development.CodeManagement
 import domains.development.GITToolType
+import domains.widget.WidgetManagement
 
 class SoftwareComponent(
     val id: Long,
     val name: String
 ) {
 
-    private val gitToolRepository = ServiceLocator.gitToolRepository
-    private val buildToolRepository = ServiceLocator.buildToolRepository
+    private val codeManagementRepository = ServiceLocator.codeManagementRepository
+    private val buildManagementRepository = ServiceLocator.buildManagementRepository
+    private val projectManagementRepository = ServiceLocator.projectManagementRepository
 
     fun setCodeManagement(
         gitToolType: GITToolType,
         repoUrl: String,
         token: String?
-    ): CodeManagement {
-        return CodeManagement(
-            gitToolRepository.addGITTool(
-                id,
-                repoUrl,
-                gitToolType,
-                token
-            )
-        )
-    }
+    ) = codeManagementRepository.addCodeManagement(
+        id,
+        repoUrl,
+        gitToolType,
+        token
+    )
 
-    fun getCodeManagement(): CodeManagement? {
-        return gitToolRepository.getGITTool(id)?.let {
-            CodeManagement(it)
-        }
-    }
+    fun getCodeManagement() = codeManagementRepository.getCodeManagement(id)
 
     fun setBuildManagement(
         buildToolType: BuildToolType,
         repoUrl: String,
         token: String?
-    ): BuildManagement {
-        return BuildManagement(
-            buildToolRepository.addBuildTool(
-                id,
-                repoUrl,
-                buildToolType,
-                token
-            )
-        )
-    }
+    ) = buildManagementRepository.addBuildManagement(
+        id,
+        repoUrl,
+        buildToolType,
+        token
+    )
 
-    fun getBuildManagement(): BuildManagement? {
-        return buildToolRepository.getBuildTool(id)?.let {
-            BuildManagement(it)
-        }
+    fun getBuildManagement() = buildManagementRepository.getBuildManagement(id)
+
+    fun getProjectManagement() = projectManagementRepository.getProjectManagementFromSoftwareId(id)
+
+    fun getWidgetManagement(): WidgetManagement {
+        return WidgetManagement(
+            projectManagement = getProjectManagement(),
+            codeManagement = getCodeManagement(),
+            buildManagement = getBuildManagement()
+        )
     }
 }

@@ -28,27 +28,27 @@ object ProjectCollaboratorTable : Table(name = "project_collaborator") {
     val scopes: Column<String> = varchar("scopes", 1000)
 }
 
-object PMToolTable : Table(name = "pm_tool") {
+object ProjectManagementTable : Table(name = "pm_tool") {
     val id: Column<Long> = long("id").autoIncrement().primaryKey()
     val url: Column<String> = varchar("url", 1000)
     val type: Column<String> = varchar("type", 100)
-    val token: Column<String?> = varchar("type", 100).nullable()
+    val token: Column<String?> = varchar("token", 100).nullable()
     val project_id: Column<Long> = long("project_id").references(ProjectTable.id)
 }
 
-object GITToolTable : Table(name = "git_tool") {
+object CodeManagementTable : Table(name = "git_tool") {
     val id: Column<Long> = long("id").autoIncrement().primaryKey()
     val url: Column<String> = varchar("url", 1000)
     val type: Column<String> = varchar("type", 100)
-    val token: Column<String?> = varchar("type", 100).nullable()
+    val token: Column<String?> = varchar("token", 100).nullable()
     val softwareId: Column<Long> = long("software_id").references(SoftwareComponentTable.id)
 }
 
-object BuildToolTable : Table(name = "build_tool") {
+object BuildManagementTable : Table(name = "build_management") {
     val id: Column<Long> = long("id").autoIncrement().primaryKey()
     val url: Column<String> = varchar("url", 1000)
     val type: Column<String> = varchar("type", 100)
-    val token: Column<String?> = varchar("type", 100).nullable()
+    val token: Column<String?> = varchar("token", 100).nullable()
     val softwareId: Column<Long> = long("software_id").references(SoftwareComponentTable.id)
 }
 
@@ -67,5 +67,5 @@ object CommitTable : Table(name = "commit") {
 object BuildTable : Table(name = "build") {
     val id: Column<String> = varchar("id", 1000).primaryKey()
     val status: Column<Boolean> = bool("staus")
-    val time: Column<Long> = CommitTable.long("time")
+    val time: Column<Long> = long("time")
 }
