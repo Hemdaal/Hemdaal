@@ -1,6 +1,6 @@
 package collectors
 
-import domains.metric.MetricCollectorData
+import domains.metricComponents.MetricCollectorData
 import models.CommitData
 
 interface RepoDataFetcher {

@@ -1,16 +1,16 @@
 package main.kotlin.models
 
 import com.expedia.graphql.annotations.GraphQLContext
-import domains.Project
-import domains.Scope
+import domains.project.Project
+import domains.user.Access
 import main.kotlin.graphql.GraphQLCallContext
 
 data class ProjectInfo(
     val id: Long,
     val name: String,
-    val scopes: List<Scope>
+    val access: AccessInfo
 ) {
-    constructor(project: Project, scopes: List<Scope>) : this(project.id, project.name, scopes)
+    constructor(project: Project, access: Access) : this(project.id, project.name, AccessInfo(access))
 
     fun collaborators(@GraphQLContext context: GraphQLCallContext): List<CollaboratorInfo> {
         return Project(id, name).getCollaborators().map {
@@ -24,11 +24,18 @@ data class ProjectInfo(
         }
     }
 
+    fun softwareComponent(@GraphQLContext context: GraphQLCallContext, softwareId: Long): SoftwareComponentInfo? {
+        return Project(id, name).getSoftwareComponent(softwareId)?.let {
+            SoftwareComponentInfo(it)
+        }
+    }
+
     fun createSoftwareComponent(
         @GraphQLContext context: GraphQLCallContext,
-        softwareComponentName: String
+        name: String
     ): SoftwareComponentInfo {
-        return SoftwareComponentInfo(Project(id, name).createSoftwareComponent(softwareComponentName))
+        val softwareComponent = Project(id, name).createSoftwareComponent(name)
+        return SoftwareComponentInfo(softwareComponent)
     }
 
     fun addCollaborator(

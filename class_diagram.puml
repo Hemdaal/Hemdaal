@@ -17,138 +17,26 @@ class Project {
     String name
     Map<User, Role> userWithRoles
     List<SoftwareComponent> softwareComponents
-    ProjectManagement projectManagement
-    List<Widget> widgets
+    Planning planning
 }
 
 Project "1" *-- "Many" Role
 User "Many" -- "Many" Project
 
-note right of Project
-    1. ProjectManagement to track overall progress and issues.
-        There will be a itemMetric for each softwareComponents and they can be linked.
-    2. Widgets -> Project level widgets
-end note
-
 class SoftwareComponent {
     String name
-    List<MetricComponent> metricComponents
-    List<Widget> widgets
+    Planning planning
+    Development development
+    Build build
+    Deploy deploy
+    Production production
 }
+
+note right of SoftwareComponent
+    SoftwareComponent is act as microservice.
+end note
 
 Project "1" *-- "Many" SoftwareComponent
 
-abstract class MetricComponent {
-    MetricCollector collector
-}
-
-SoftwareComponent "1" *-- "Many" MetricComponent
-
-abstract class MetricCollector {
-    String resourceUrl
-    AuthInfo authInfo
-    long lastSyncTime
-
-    void onSync()
-}
-
-note right of MetricCollector
-    RepositoryCollector
-        GitlabRepoCollector
-        GitHubRepoCollector
-    BuildCollector
-        JenkinsBuildCollector
-        GitlabBuildCollector
-    etc.
-end note
-
-MetricComponent "1" *-- "1" MetricCollector
-
-note right of MetricComponent
-    Repository
-    StaticAnalysis
-    Build
-    PerformanceAnalysis
-    Deploy
-    HealthCheck
-    Stories
-end note
-
-class Repository<extends MetricComponent> {
-    String masterBranchName
-    List<Commit> commits
-    List<MergeRequest> mergeRequests
-}
-
-Repository <|-- MetricComponent
-
-class Commit {
-    String sha
-    Collaborator author
-    List<String> branches
-    CommitType type
-    long time
-}
-
-Repository "1" *-- "Many" Commit
-
-enum CommitType {
-    COMMIT
-    MERGE
-}
-
-Commit "1" *-- "1" CommitType
-
-class Collaborator {
-    String name
-    String email
-}
-
-Commit "1" o-- "1" Collaborator
-
-class MergeRequest {
-    String srcBranch
-    String destBranch
-    boolean status
-    Collaborator author
-    List<Collaborator> approves
-}
-
-Repository "1" *-- "Many" MergeRequest
-
-class Build {
-    List<BuildJob> jobs
-}
-
-Build <|-- MetricComponent
-
-class BuildJob {
-    String id
-    String version
-    long time
-    boolean isSuccess
-    Commit? triggeredCommit
-}
-
-Build "1" *-- "Many" BuildJob
-BuildJob "Many" o-- "1" Commit
-
-class Deploy {
-    List<DeployJob> jobs
-}
-
-Deploy <|-- MetricComponent
-
-class DeployJob {
-    String id
-    String stage
-    String version
-    long time
-    boolean isSuccess
-    Commit? triggeredCommit
-}
-
-Deploy "1" *-- "Many" DeployJob
-DeployJob "Many" o-- "1" Commit
 
 @enduml

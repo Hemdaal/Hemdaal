@@ -1,6 +1,7 @@
 package main.kotlin.models
 
-import domains.metric.repo.Commit
+import domains.development.Commit
+
 
 data class CommitInfo(
     val sha: String,

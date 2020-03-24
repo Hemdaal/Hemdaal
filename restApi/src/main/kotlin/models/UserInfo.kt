@@ -2,7 +2,7 @@ package main.kotlin.models
 
 import com.expedia.graphql.annotations.GraphQLContext
 import com.google.gson.annotations.SerializedName
-import domains.User
+import domains.user.User
 import main.kotlin.graphql.GraphQLCallContext
 
 

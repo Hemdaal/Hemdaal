@@ -1,7 +1,7 @@
 package services
 
 import di.ServiceLocator
-import domains.User
+import domains.user.User
 import repositories.UserRepository
 import utils.HashUtils
 

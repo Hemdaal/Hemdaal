@@ -1,13 +1,18 @@
 package fetchers
 
 import collectors.RepoDataFetcher
-import domains.metric.MetricCollectorData
-import domains.metric.repo.Commit
+import domains.metricComponents.MetricCollectorData
+import io.ktor.client.request.get
+import models.CommitData
+import network.NetworkEngine
 
 class GithubRepoFetcher : RepoDataFetcher {
 
-    override fun fetchCommits(metricCollectorData: MetricCollectorData): List<Commit> {
-        //TODO
+    override fun fetchCommits(metricCollectorData: MetricCollectorData): List<CommitData> {
+
+        NetworkEngine.client.get(metricCollectorData.resourceUrl)
+
+
         return emptyList()
     }
 }

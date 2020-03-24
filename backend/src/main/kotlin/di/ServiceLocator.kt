@@ -9,7 +9,6 @@ import utils.HashUtils
 
 object ServiceLocator : KoinComponent {
 
-    val metricRepository by inject<MetricRepository>()
     val commitRepository by inject<CommitRepository>()
     val projectRepository by inject<ProjectRepository>()
     val collaboratorRepository by inject<CollaboratorRepository>()
@@ -17,4 +16,7 @@ object ServiceLocator : KoinComponent {
     val userRepository by inject<UserRepository>()
     val orgAccessRepository by inject<ProjectCollaboratorRepository>()
     val hashUtils by inject<HashUtils>()
+    val pmToolRepository by inject<PMToolRepository>()
+    val gitToolRepository by inject<GITToolRepository>()
+    val buildToolRepository by inject<BuildToolRepository>()
 }

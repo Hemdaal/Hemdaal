@@ -1,7 +1,7 @@
 package repositories
 
 import db.UserTable
-import domains.User
+import domains.user.User
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert

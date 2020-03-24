@@ -1,0 +1,18 @@
+MVP Version Features.
+
+1. Supports only GitHub Tools
+2. Features :
+    1. ProjectManagement(Issue management for Github),
+    2. Commits and Pull Requests
+    3. Build status
+    4. Multiple Software Components
+    5. Deploys and versions.
+3. Widgets (Only at software level)
+    1. Features widget(Feature name, status, assignedTo)
+    2. Repo Widget (Commits and MR graph)
+    3. Build Widget (List of Build with status, triggered time, etc)
+    4. Deploy Widget
+
+De Scoped :
+1. Edit Project
+2. Add members

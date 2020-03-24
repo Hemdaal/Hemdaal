@@ -12,7 +12,9 @@ val hemdaalInjectionModule = module {
     single { ProjectCollaboratorRepository() }
     single { HashUtils() }
     single { CollaboratorRepository() }
-    single { MetricRepository() }
     single { SoftwareComponentRepository() }
     single { CommitRepository() }
+    single { PMToolRepository() }
+    single { GITToolRepository() }
+    single { BuildToolRepository() }
 }

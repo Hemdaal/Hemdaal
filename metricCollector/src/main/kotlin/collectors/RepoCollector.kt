@@ -2,10 +2,10 @@ package collectors
 
 import di.ServiceLocator
 import domains.metric.repo.Commit
-import domains.metric.repo.RepoMetric
+import domains.metric.repo.RepoMetricComponent
 import services.CollaboratorService
 
-class RepoCollector(private val repoDataFetcher: RepoDataFetcher, private val repoMetric: RepoMetric) {
+class RepoCollector(private val repoDataFetcher: RepoDataFetcher, private val repoMetric: RepoMetricComponent) {
 
     private val collaboratorService: CollaboratorService = ServiceLocator.collaboratorService
 

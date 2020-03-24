@@ -1,7 +1,7 @@
 package repositories
 
 import db.ProjectTable
-import domains.Project
+import domains.project.Project
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
