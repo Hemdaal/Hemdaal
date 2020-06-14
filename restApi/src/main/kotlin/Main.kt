@@ -56,7 +56,7 @@ fun Application.module() {
         ApplicationConfig.DB_PASSWORD
     )
     intercept(ApplicationCallPipeline.Features) {
-        delay(Duration.ofSeconds(2))
+        delay(Duration.ofSeconds(1))
     }
 
     install(DefaultHeaders)

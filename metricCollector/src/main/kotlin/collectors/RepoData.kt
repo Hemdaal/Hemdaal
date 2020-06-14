@@ -1,6 +1,7 @@
 package collectors
 
-import domains.metric.repo.Commit
+import domains.development.Commit
+
 
 data class RepoData(
     val repoName: String,

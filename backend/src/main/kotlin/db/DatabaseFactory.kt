@@ -18,6 +18,7 @@ class DatabaseFactory(
 
     init {
         val flyway = Flyway.configure().dataSource(dbHost, dbUser, dbPassword).load()
+        flyway.isBaselineOnMigrate = true
         flyway.migrate()
 
         Database.connect(hikari())

@@ -8,6 +8,5 @@ import services.CollaboratorService
 
 object ServiceLocator : KoinComponent {
 
-    val metricService by inject<MetricService>()
     val collaboratorService by inject<CollaboratorService>()
 }
