@@ -2,23 +2,14 @@ package main.kotlin
 
 import InitService
 import di.hemdaalInjectionModule
-import io.ktor.application.Application
-import io.ktor.application.ApplicationCallPipeline
-import io.ktor.application.call
-import io.ktor.application.install
-import io.ktor.features.CORS
-import io.ktor.features.CallLogging
-import io.ktor.features.ContentNegotiation
-import io.ktor.features.DefaultHeaders
-import io.ktor.gson.gson
-import io.ktor.http.ContentType
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpMethod
-import io.ktor.response.respondText
-import io.ktor.routing.get
-import io.ktor.routing.routing
-import io.ktor.server.engine.embeddedServer
-import io.ktor.server.netty.Netty
+import io.ktor.application.*
+import io.ktor.features.*
+import io.ktor.gson.*
+import io.ktor.http.*
+import io.ktor.response.*
+import io.ktor.routing.*
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
 import kotlinx.coroutines.time.delay
 import main.kotlin.auth.installAuth
 import main.kotlin.di.injectionModule
@@ -49,12 +40,15 @@ fun Application.module() {
         allowCredentials = true
         anyHost()
     }
-    InitService().init(
+
+    InitService.initDB(
         ApplicationConfig.DB_HOST,
         ApplicationConfig.DB_PORT,
         ApplicationConfig.DB_USER_NAME,
         ApplicationConfig.DB_PASSWORD
     )
+    InitService.initCollectors()
+
     intercept(ApplicationCallPipeline.Features) {
         delay(Duration.ofSeconds(1))
     }

@@ -1,3 +1,0 @@
-CREATE USER hemdaal WITH ENCRYPTED PASSWORD 'secrect';
-CREATE DATABASE hemdaal_db;
-GRANT ALL PRIVILEGES ON DATABASE hemdaal_db TO hemdaal;

@@ -17,8 +17,10 @@ class DatabaseFactory(
     private val dbHost = "jdbc:postgresql://$dbUrl:$dbPort/hemdaal_db"
 
     init {
-        val flyway = Flyway.configure().dataSource(dbHost, dbUser, dbPassword).load()
-        flyway.isBaselineOnMigrate = true
+        val flyway = Flyway.configure()
+            .dataSource(dbHost, dbUser, dbPassword)
+            .baselineOnMigrate(true)
+            .load()
         flyway.migrate()
 
         Database.connect(hikari())

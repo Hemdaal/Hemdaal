@@ -1,17 +1,14 @@
 package domains.development
 
+import di.ServiceLocator
+import repositories.CodeManagementRepository
+
 class CodeManagement(
     val id: Long,
-    val tool: GITTool
+    val tool: RepoTool,
+    private var lastSynced: Long
 ) {
-
-    fun addCommits(commits: List<Commit>) {
-
-    }
-
-    fun addMergeRequests(mergeRequests: List<MergeRequest>) {
-
-    }
+    private val codeManagementRepository: CodeManagementRepository = ServiceLocator.codeManagementRepository
 
     fun getCommits(
         startTime: Long? = 0
@@ -23,5 +20,13 @@ class CodeManagement(
         startTime: Long? = 0
     ): List<MergeRequest> {
         return emptyList()
+    }
+
+    fun getLastSynced(): Long {
+        return lastSynced
+    }
+
+    fun setLastSynced(lastSynced: Long) {
+        codeManagementRepository.setLastSynced(id, lastSynced)
     }
 }

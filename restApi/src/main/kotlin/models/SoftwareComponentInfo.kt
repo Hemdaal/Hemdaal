@@ -1,6 +1,6 @@
 package main.kotlin.models
 
-import domains.development.GITToolType
+import domains.development.RepoToolType
 import domains.project.SoftwareComponent
 
 data class SoftwareComponentInfo(
@@ -10,12 +10,12 @@ data class SoftwareComponentInfo(
     constructor(softwareComponent: SoftwareComponent) : this(softwareComponent.id, softwareComponent.name)
 
     fun setToolForCodeManagement(
-        gitToolType: GITToolType,
+        repoToolType: RepoToolType,
         gitRepoUrl: String,
         gitRepoToken: String?
-    ) = CodeManagementInfo(SoftwareComponent(id, name).setCodeManagement(gitToolType, gitRepoUrl, gitRepoToken))
+    ) = CodeManagementInfo.from(SoftwareComponent(id, name).setCodeManagement(repoToolType, gitRepoUrl, gitRepoToken))
 
     fun getToolForCodeManagement() = SoftwareComponent(id, name).getCodeManagement()?.let {
-        CodeManagementInfo(it)
+        CodeManagementInfo.from(it)
     }
 }

@@ -22,6 +22,7 @@ class CommitRepository {
         return Commit(
             sha = row[CommitTable.sha],
             authorId = row[CommitTable.authorId],
+            message = row[CommitTable.message],
             time = row[CommitTable.time]
         )
     }

@@ -1,7 +1,7 @@
-package network
+package utils.network
 
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.*
+import io.ktor.client.engine.okhttp.*
 
 object NetworkEngine {
 
@@ -10,7 +10,6 @@ object NetworkEngine {
             config { // this: OkHttpClient.Builder ->
                 followRedirects(true)
             }
-
         }
     }
 }

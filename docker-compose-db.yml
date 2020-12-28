@@ -1,0 +1,19 @@
+version: '3'
+services:
+  database:
+    image: postgres:11.5-alpine
+    container_name: db-container
+    volumes:
+      - data-volume:/data/geodb
+    environment:
+      - POSTGRES_USER=hemdaal
+      - POSTGRES_PASSWORD=secrect
+      - POSTGRES_DB=hemdaal_db
+    ports:
+      - '5432:5432'
+    networks:
+      - default
+
+volumes:
+  data-volume:
+    external: true

@@ -26,20 +26,19 @@ services:
       - ./ssl/:/etc/ssl/
 
   database:
-    build:
-      context: ./Docker
-      dockerfile: db.Dockerfile
+    image: postgres:11.5-alpine
     container_name: db-container
-    restart: always
-    expose:
-      - 5432
-    networks:
-      - default
     volumes:
-      - data-volume:/data/db
+      - data-volume:/data/geodb
+    environment:
+      - POSTGRES_USER=hemdaal
+      - POSTGRES_PASSWORD=secrect
+      - POSTGRES_DB=hemdaal_db
     ports:
       - '5432:5432'
-
+    networks:
+      - default
 
 volumes:
   data-volume:
+    external: true

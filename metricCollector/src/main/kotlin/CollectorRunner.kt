@@ -1,7 +1,0 @@
-class CollectorRunner {
-
-
-    fun fetchAndRunCollectors() {
-
-    }
-}

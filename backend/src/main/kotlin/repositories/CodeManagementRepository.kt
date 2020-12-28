@@ -2,19 +2,22 @@ package repositories
 
 import db.CodeManagementTable
 import domains.development.CodeManagement
-import domains.development.GITTool
-import domains.development.GITToolType
+import domains.development.RepoToolType
+import domains.development.RepoToolType.*
+import domains.development.repo.GitLabRepoTool
+import domains.development.repo.GithubRepoTool
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.statements.InsertStatement
+import org.jetbrains.exposed.sql.update
 
 class CodeManagementRepository {
 
     fun addCodeManagement(
         softwareId: Long,
         url: String,
-        type: GITToolType,
+        type: RepoToolType,
         token: String?
     ) = CodeManagementTable.insert {
         it[CodeManagementTable.softwareId] = softwareId
@@ -30,22 +33,48 @@ class CodeManagementRepository {
             convertRowToCodeManagement(it)
         }
 
+    fun setLastSynced(id: Long, lastSynced: Long) {
+        CodeManagementTable.update(where = { CodeManagementTable.id eq id }) {
+            it[CodeManagementTable.lastSynced] = lastSynced
+        }
+    }
 
-    private fun convertRowToCodeManagement(row: ResultRow) = CodeManagement(
-        row[CodeManagementTable.id],
-        GITTool(
-            GITToolType.valueOf(row[CodeManagementTable.type]),
-            row[CodeManagementTable.url],
-            row[CodeManagementTable.token]
+    private fun convertRowToCodeManagement(row: ResultRow): CodeManagement {
+        val repoToolType = valueOf(row[CodeManagementTable.type])
+        val repoTool = when (repoToolType) {
+            GITHUB -> GithubRepoTool(
+                row[CodeManagementTable.url],
+                row[CodeManagementTable.token]
+            )
+            GITLAB -> GitLabRepoTool(
+                row[CodeManagementTable.url],
+                row[CodeManagementTable.token]
+            )
+        }
+        return CodeManagement(
+            id = row[CodeManagementTable.id],
+            tool = repoTool,
+            lastSynced = row[CodeManagementTable.lastSynced] ?: 0L
         )
-    )
+    }
 
-    private fun convertRowToCodeManagement(row: InsertStatement<Number>) = CodeManagement(
-        row[CodeManagementTable.id],
-        GITTool(
-            GITToolType.valueOf(row[CodeManagementTable.type]),
-            row[CodeManagementTable.url],
-            row[CodeManagementTable.token]
+    private fun convertRowToCodeManagement(row: InsertStatement<Number>): CodeManagement {
+        val repoToolType = valueOf(row[CodeManagementTable.type])
+        val repoTool = when (repoToolType) {
+            GITHUB -> GithubRepoTool(
+                row[CodeManagementTable.url],
+                row[CodeManagementTable.token]
+            )
+            GITLAB -> GitLabRepoTool(
+                row[CodeManagementTable.url],
+                row[CodeManagementTable.token]
+            )
+        }
+        return CodeManagement(
+            id = row[CodeManagementTable.id],
+            tool = repoTool,
+            lastSynced = row[CodeManagementTable.lastSynced] ?: 0L
         )
-    )
+    }
+
 }

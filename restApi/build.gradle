@@ -4,11 +4,9 @@ apply plugin: "com.github.johnrengelman.shadow"
 apply plugin: 'application'
 
 buildscript {
-
     ext.ktor_version = '1.2.4'
     ext.logback_version = '1.2.3'
     ext.slf4j_version = '1.7.25'
-
 
     repositories {
         mavenCentral()
