@@ -14,7 +14,7 @@ class SoftwareComponentRepository {
     fun getSoftwareComponentsBy(projectId: Long): List<SoftwareComponent> {
         return transaction {
             SoftwareComponentTable.select(where = { SoftwareComponentTable.projectId eq projectId }).mapNotNull {
-                convertRowToSofwareComponent(it)
+                convertRowToSofwareComponent(projectId, it)
             }
         }
     }
@@ -23,7 +23,7 @@ class SoftwareComponentRepository {
         return transaction {
             SoftwareComponentTable.select(where = { (SoftwareComponentTable.projectId eq projectId) and (SoftwareComponentTable.id eq softwareId) })
                 .singleOrNull()?.let {
-                convertRowToSofwareComponent(it)
+                    convertRowToSofwareComponent(projectId, it)
             }
         }
     }
@@ -34,21 +34,23 @@ class SoftwareComponentRepository {
                 it[SoftwareComponentTable.name] = name
                 it[SoftwareComponentTable.projectId] = projectId
             }.let {
-                convertRowToSofwareComponent(it)
+                convertRowToSofwareComponent(projectId, it)
             }
         }
     }
 
-    private fun convertRowToSofwareComponent(row: InsertStatement<Number>): SoftwareComponent {
+    private fun convertRowToSofwareComponent(projectId: Long, row: InsertStatement<Number>): SoftwareComponent {
         return SoftwareComponent(
             id = row[SoftwareComponentTable.id],
+            projectId = projectId,
             name = row[SoftwareComponentTable.name]
         )
     }
 
-    private fun convertRowToSofwareComponent(row: ResultRow): SoftwareComponent {
+    private fun convertRowToSofwareComponent(projectId: Long, row: ResultRow): SoftwareComponent {
         return SoftwareComponent(
             id = row[SoftwareComponentTable.id],
+            projectId = projectId,
             name = row[SoftwareComponentTable.name]
         )
     }

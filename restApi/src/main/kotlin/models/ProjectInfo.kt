@@ -30,7 +30,7 @@ data class ProjectInfo(
         }
     }
 
-    fun createSoftwareComponent(
+    fun addSoftwareComponent(
         @GraphQLContext context: GraphQLCallContext,
         name: String
     ): SoftwareComponentInfo {

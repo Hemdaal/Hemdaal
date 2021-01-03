@@ -10,6 +10,7 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.statements.InsertStatement
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 
 class CodeManagementRepository {
@@ -19,23 +20,28 @@ class CodeManagementRepository {
         url: String,
         type: RepoToolType,
         token: String?
-    ) = CodeManagementTable.insert {
-        it[CodeManagementTable.softwareId] = softwareId
-        it[CodeManagementTable.url] = url
-        it[CodeManagementTable.token] = token
-        it[CodeManagementTable.type] = type.name
-    }.let {
-        convertRowToCodeManagement(it)
+    ): CodeManagement = transaction {
+        CodeManagementTable.insert {
+            it[CodeManagementTable.softwareId] = softwareId
+            it[CodeManagementTable.url] = url
+            it[CodeManagementTable.token] = token
+            it[CodeManagementTable.type] = type.name
+        }.let {
+            convertRowToCodeManagement(it)
+        }
     }
 
-    fun getCodeManagement(softwareId: Long) =
+    fun getCodeManagement(softwareId: Long) = transaction {
         CodeManagementTable.select(where = { CodeManagementTable.softwareId eq softwareId }).singleOrNull()?.let {
             convertRowToCodeManagement(it)
         }
+    }
 
     fun setLastSynced(id: Long, lastSynced: Long) {
-        CodeManagementTable.update(where = { CodeManagementTable.id eq id }) {
-            it[CodeManagementTable.lastSynced] = lastSynced
+        transaction {
+            CodeManagementTable.update(where = { CodeManagementTable.id eq id }) {
+                it[CodeManagementTable.lastSynced] = lastSynced
+            }
         }
     }
 

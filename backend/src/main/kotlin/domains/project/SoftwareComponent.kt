@@ -5,6 +5,7 @@ import domains.development.RepoToolType
 
 class SoftwareComponent(
     val id: Long,
+    val projectId: Long,
     val name: String
 ) {
 
