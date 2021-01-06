@@ -1,22 +1,22 @@
 package main.kotlin.graphql
 
 import com.expedia.graphql.annotations.GraphQLContext
+import domains.System
 import io.ktor.auth.*
 import main.kotlin.auth.JWTTokenManager
 import main.kotlin.di.inject
 import main.kotlin.models.AuthInfo
 import main.kotlin.models.UserInfo
-import services.UserService
 
-class System {
+class Entry {
 
-    private val userService by lazy { inject<UserService>() }
+    private val system by lazy { inject<System>() }
     private val jwtTokenManager by lazy { inject<JWTTokenManager>() }
 
     fun user(@GraphQLContext context: GraphQLCallContext): UserInfo? {
         val email = context.call.principal<UserIdPrincipal>()?.name
         if (email != null) {
-            return userService.getUserBy(email)?.let {
+            return system.getUserBy(email)?.let {
                 UserInfo(it, jwtTokenManager.createToken(it) ?: "")
             }
         }
@@ -29,9 +29,9 @@ class System {
         email: String,
         password: String
     ): AuthInfo? {
-        val status = userService.createUser(name, email, password)
+        val status = system.createUser(name, email, password)
         if (status) {
-            return userService.getUserBy(email, password)?.let {
+            return system.getUserBy(email, password)?.let {
                 AuthInfo(jwtTokenManager.createToken(it) ?: "")
             }
         }
@@ -44,7 +44,7 @@ class System {
         email: String,
         password: String
     ): AuthInfo? {
-        return userService.getUserBy(email, password)?.let {
+        return system.getUserBy(email, password)?.let {
             AuthInfo(jwtTokenManager.createToken(it) ?: "")
         }
     }

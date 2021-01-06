@@ -3,9 +3,11 @@ package domains.user
 import di.ServiceLocator
 import domains.Collaborator
 import domains.project.Project
+import domains.widgets.UserProjectDashboard
 import repositories.CollaboratorRepository
 import repositories.ProjectCollaboratorRepository
 import repositories.ProjectRepository
+import repositories.UserProjectDashboardRepository
 
 class User(
     val id: Long,
@@ -15,6 +17,7 @@ class User(
     private val projectCollaboratorRepository: ProjectCollaboratorRepository = ServiceLocator.orgAccessRepository
     private val projectRepository: ProjectRepository = ServiceLocator.projectRepository
     private val collaboratorRepository: CollaboratorRepository = ServiceLocator.collaboratorRepository
+    private val userProjectRepository: UserProjectDashboardRepository = ServiceLocator.userProjectDashboardRepository
 
     fun getProjects(): Map<Project, Access> {
         return projectCollaboratorRepository.getProjectsWithScope(getCollaborator().id)
@@ -37,5 +40,10 @@ class User(
             )
             Pair(it, Access.createOwnerAccess())
         }
+    }
+
+    fun getProjectDashboard(projectId: Long): UserProjectDashboard {
+        return userProjectRepository.getUserProjectDashboard(userId = id, projectId = projectId)
+            ?: userProjectRepository.createUserProjectDashboard(userId = id, projectId = projectId)
     }
 }

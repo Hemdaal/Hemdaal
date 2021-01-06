@@ -71,3 +71,16 @@ object BuildTable : Table(name = "build") {
     val status: Column<Boolean> = bool("staus")
     val time: Column<Long> = long("time")
 }
+
+object UserProjectDashboardTable : Table("project_dashboard") {
+    val userId: Column<Long> = long("user_id").references(UserTable.id)
+    val projectId: Column<Long> = long("project_id").references(ProjectTable.id)
+    val widgetIds: Column<String> = varchar("widget_ids", 1000)
+}
+
+object ProjectWidgetTable : Table(name = "project_widget") {
+    val id: Column<Long> = long("id").autoIncrement().primaryKey()
+    val type: Column<String> = varchar("type", 100)
+    val projectId: Column<Long> = long("project_id").references(ProjectTable.id)
+    val additionalInfo: Column<String?> = varchar("additional_info", 1000).nullable()
+}

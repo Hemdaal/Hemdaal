@@ -20,7 +20,7 @@ data class GraphQLRequest(val query: String?, val operationName: String?, val va
 fun Application.installGraphQL() {
 
     val config = SchemaGeneratorConfig(listOf("main.kotlin.models"))
-    val queries = listOf(TopLevelObject(System()))
+    val queries = listOf(TopLevelObject(Entry()))
     val graphQL = GraphQL.newGraphQL(toSchema(config = config, queries = queries, mutations = queries)).build()
 
     suspend fun ApplicationCall.executeQuery() {

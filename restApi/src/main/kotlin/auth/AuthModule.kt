@@ -1,17 +1,11 @@
 package main.kotlin.auth
 
-import io.ktor.application.Application
-import io.ktor.application.install
-import io.ktor.auth.Authentication
-import io.ktor.auth.UserIdPrincipal
-import io.ktor.auth.basic
-import io.ktor.auth.jwt.jwt
-import io.ktor.auth.session
-import io.ktor.sessions.Sessions
-import io.ktor.sessions.cookie
-import io.ktor.sessions.sessions
+import domains.System
+import io.ktor.application.*
+import io.ktor.auth.*
+import io.ktor.auth.jwt.*
+import io.ktor.sessions.*
 import org.koin.ktor.ext.inject
-import services.UserService
 
 const val BASIC_AUTH = "basic_auth"
 const val JWT_AUTH = "jwt_auth"
@@ -21,7 +15,7 @@ const val USER_TOKEN_COOKIE = "user_token_cookie"
 
 fun Application.installAuth() {
 
-    val userService: UserService by inject()
+    val system: System by inject()
     val jwtTokenManager: JWTTokenManager by inject()
 
     install(Sessions) {
@@ -35,7 +29,7 @@ fun Application.installAuth() {
             realm = REALM
             skipWhen { call -> call.request.headers["Authorization"] == null }
             validate { credentials ->
-                val user = UserService().getUserBy(credentials.name, credentials.password)
+                val user = system.getUserBy(credentials.name, credentials.password)
                 if (user != null) {
                     val token = jwtTokenManager.createToken(user)
                     if (token != null) {
