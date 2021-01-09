@@ -81,6 +81,7 @@ object UserProjectDashboardTable : Table("project_dashboard") {
 object ProjectWidgetTable : Table(name = "project_widget") {
     val id: Column<Long> = long("id").autoIncrement().primaryKey()
     val type: Column<String> = varchar("type", 100)
+    val userId: Column<Long> = long("user_id").references(UserTable.id)
     val projectId: Column<Long> = long("project_id").references(ProjectTable.id)
     val additionalInfo: Column<String?> = varchar("additional_info", 1000).nullable()
 }

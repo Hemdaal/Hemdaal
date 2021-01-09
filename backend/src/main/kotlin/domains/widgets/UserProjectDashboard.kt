@@ -6,8 +6,7 @@ import repositories.UserProjectDashboardRepository
 
 class UserProjectDashboard(
     val userId: Long,
-    val projectId: Long,
-    val orderedWidgetIds: MutableList<Long>
+    val projectId: Long
 ) {
 
     private val userProjectDashboardRepository: UserProjectDashboardRepository =
@@ -15,22 +14,47 @@ class UserProjectDashboard(
     private val projectWidgetRepository: ProjectWidgetRepository = ServiceLocator.projectWidgetRepository
 
     fun getOrderedProjectWidgets(): List<ProjectWidget> {
-        return projectWidgetRepository.getProjectWidgets(orderedWidgetIds)
+        val widgetIds = getOrderedWidgetIds()
+        val widgets = projectWidgetRepository.getProjectWidgets(widgetIds)
+
+        val orderById = widgetIds.withIndex().associate { it.value to it.index }
+        return widgets.sortedBy { orderById[it.id] }
     }
 
-    fun addWidget(widget: ProjectWidget): ProjectWidget {
-        val widget = projectWidgetRepository.addProjectWidget(projectId, widget)
-        orderedWidgetIds.add(widget.id)
-        userProjectDashboardRepository.setOrderedWidgets(userId, projectId, orderedWidgetIds)
+    fun addWidget(type: ProjectWidgetType, additionalInfo: String): ProjectWidget {
+        val widgetIds = getOrderedWidgetIds().toMutableList()
+        val widget = projectWidgetRepository.addProjectWidget(
+            projectId = projectId,
+            userId = userId,
+            type = type,
+            additonalInfo = additionalInfo
+        )
+        userProjectDashboardRepository.setOrderedWidgets(
+            userId = userId,
+            projectId = projectId,
+            orderedWidgetIds = widgetIds
+        )
 
         return widget
     }
 
-    fun removeWidget(widget: ProjectWidget) {
-        TODO()
+    fun removeWidget(id: Long) {
+        val widgetIds = getOrderedWidgetIds().toMutableList()
+        widgetIds.remove(id)
+        orderWidgets(widgetIds)
+        projectWidgetRepository.removeWidget(id = id, userId = userId)
     }
 
-    fun orderWidgets(widgetIds: Long) {
-        userProjectDashboardRepository.setOrderedWidgets(userId, projectId, orderedWidgetIds)
+    fun orderWidgets(widgetIds: List<Long>) {
+        userProjectDashboardRepository.setOrderedWidgets(
+            userId = userId,
+            projectId = projectId,
+            orderedWidgetIds = widgetIds
+        )
     }
+
+    private fun getOrderedWidgetIds() = userProjectDashboardRepository.getOrderedWidgets(
+        userId = userId,
+        projectId = projectId
+    )
 }

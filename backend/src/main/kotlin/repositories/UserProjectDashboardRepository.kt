@@ -30,7 +30,7 @@ class UserProjectDashboardRepository {
         }
     }
 
-    fun setOrderedWidgets(userId: Long, projectId: Long, orderedWidgetIds: MutableList<Long>) {
+    fun setOrderedWidgets(userId: Long, projectId: Long, orderedWidgetIds: List<Long>) {
         transaction {
             UserProjectDashboardTable.update(where = {
                 UserProjectDashboardTable.userId.eq(userId).and(UserProjectDashboardTable.projectId.eq(projectId))
@@ -40,23 +40,29 @@ class UserProjectDashboardRepository {
         }
     }
 
+    fun getOrderedWidgets(userId: Long, projectId: Long): List<Long> {
+        return transaction {
+            UserProjectDashboardTable.select(where = {
+                UserProjectDashboardTable.userId.eq(userId).and(UserProjectDashboardTable.projectId.eq(projectId))
+            }).singleOrNull()?.let {
+                it[UserProjectDashboardTable.widgetIds].split(",").map {
+                    it.toLongOrNull()
+                }.filterNotNull().toList()
+            } ?: emptyList()
+        }
+    }
+
     private fun convertRowToUserProjectDashboard(row: InsertStatement<Number>): UserProjectDashboard {
         return UserProjectDashboard(
             userId = row[UserProjectDashboardTable.userId],
-            projectId = row[UserProjectDashboardTable.projectId],
-            orderedWidgetIds = row[UserProjectDashboardTable.widgetIds].split(",").map {
-                it.toLongOrNull()
-            }.filterNotNull().toMutableList()
+            projectId = row[UserProjectDashboardTable.projectId]
         )
     }
 
     private fun convertRowToUserProjectDashboard(row: ResultRow): UserProjectDashboard {
         return UserProjectDashboard(
             userId = row[UserProjectDashboardTable.userId],
-            projectId = row[UserProjectDashboardTable.projectId],
-            orderedWidgetIds = row[UserProjectDashboardTable.widgetIds].split(",").map {
-                it.toLongOrNull()
-            }.filterNotNull().toMutableList()
+            projectId = row[UserProjectDashboardTable.projectId]
         )
     }
 }

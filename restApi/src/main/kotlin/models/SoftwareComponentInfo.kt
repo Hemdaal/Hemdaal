@@ -5,12 +5,10 @@ import domains.project.SoftwareComponent
 
 data class SoftwareComponentInfo(
     val id: Long,
-    val projectId: Long,
     val name: String
 ) {
     constructor(softwareComponent: SoftwareComponent) : this(
         softwareComponent.id,
-        softwareComponent.projectId,
         softwareComponent.name
     )
 
@@ -19,14 +17,14 @@ data class SoftwareComponentInfo(
         repoUrl: String,
         repoToken: String?
     ) = CodeManagementInfo.from(
-        SoftwareComponent(id, projectId, name).setCodeManagement(
+        SoftwareComponent(id, name).setCodeManagement(
             repoToolType,
             repoUrl,
             repoToken
         )
     )
 
-    fun getCodeManagementTool() = SoftwareComponent(id, projectId, name).getCodeManagement()?.let {
+    fun getCodeManagementTool() = SoftwareComponent(id, name).getCodeManagement()?.let {
         CodeManagementInfo.from(it)
     }
 }

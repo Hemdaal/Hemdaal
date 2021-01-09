@@ -27,10 +27,6 @@ class User(
         return projectCollaboratorRepository.getProjectWithScope(getCollaborator().id, projectId)
     }
 
-    private fun getCollaborator(): Collaborator {
-        return collaboratorRepository.getOrCreateCollaborator(name, email)
-    }
-
     fun createProject(name: String): Pair<Project, Access> {
         return projectRepository.createProject(name).let {
             projectCollaboratorRepository.createCollaboratorAccess(
@@ -45,5 +41,9 @@ class User(
     fun getProjectDashboard(projectId: Long): UserProjectDashboard {
         return userProjectRepository.getUserProjectDashboard(userId = id, projectId = projectId)
             ?: userProjectRepository.createUserProjectDashboard(userId = id, projectId = projectId)
+    }
+
+    private fun getCollaborator(): Collaborator {
+        return collaboratorRepository.getOrCreateCollaborator(name, email)
     }
 }

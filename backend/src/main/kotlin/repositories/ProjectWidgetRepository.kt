@@ -3,11 +3,10 @@ package repositories
 import db.ProjectWidgetTable
 import domains.widgets.CommitWidget
 import domains.widgets.ProjectWidget
+import domains.widgets.ProjectWidgetType
 import domains.widgets.ProjectWidgetType.COMMIT
 import domains.widgets.ProjectWidgetType.valueOf
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -21,15 +20,23 @@ class ProjectWidgetRepository {
         }
     }
 
-    fun addProjectWidget(projectId: Long, widget: ProjectWidget): ProjectWidget {
+    fun addProjectWidget(projectId: Long, userId: Long, type: ProjectWidgetType, additonalInfo: String): ProjectWidget {
         return transaction {
             ProjectWidgetTable.insert {
-                it[ProjectWidgetTable.type] = widget.getType().name
+                it[ProjectWidgetTable.type] = type.name
+                it[ProjectWidgetTable.userId] = userId
                 it[ProjectWidgetTable.projectId] = projectId
-                it[ProjectWidgetTable.additionalInfo] = widget.getAdditionalInfo()
+                it[ProjectWidgetTable.additionalInfo] = additonalInfo
             }.let {
                 convertRowToUserProjectDashboard(it)
             }
+        }
+    }
+
+
+    fun removeWidget(id: Long, userId: Long) {
+        transaction {
+            ProjectWidgetTable.deleteWhere { ProjectWidgetTable.id.eq(id).and(ProjectWidgetTable.userId.eq(userId)) }
         }
     }
 

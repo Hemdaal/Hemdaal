@@ -41,10 +41,6 @@ class SoftwareComponent {
     Production production
 }
 
-note right of SoftwareComponent
-    SoftwareComponent is act as microservice.
-end note
-
 Project "1" *-- "Many" SoftwareComponent
 
 class CodeManagement {

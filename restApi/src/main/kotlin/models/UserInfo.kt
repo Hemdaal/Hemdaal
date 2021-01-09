@@ -1,9 +1,7 @@
 package main.kotlin.models
 
-import com.expedia.graphql.annotations.GraphQLContext
 import com.google.gson.annotations.SerializedName
 import domains.user.User
-import main.kotlin.graphql.GraphQLCallContext
 
 
 data class UserInfo(
@@ -14,20 +12,22 @@ data class UserInfo(
 ) {
     constructor(user: User, token: String) : this(user.id, user.name, user.email, token)
 
-    fun projects(@GraphQLContext context: GraphQLCallContext): List<ProjectInfo> =
+    fun projects(): List<ProjectInfo> =
         User(id, name, email).getProjects().map {
             ProjectInfo(it.key, it.value)
         }
 
-
-    fun project(@GraphQLContext context: GraphQLCallContext, projectId: Long): ProjectInfo? =
+    fun project(projectId: Long): ProjectInfo? =
         User(id, name, email).getProject(projectId)?.let {
             ProjectInfo(it.first, it.second)
         }
 
-    fun createProject(@GraphQLContext context: GraphQLCallContext, name: String): ProjectInfo {
+    fun createProject(name: String): ProjectInfo {
         val projectScopePair = User(id, name, email).createProject(name)
         return ProjectInfo(projectScopePair.first, projectScopePair.second)
     }
 
+    fun getProjectDashboard(projectId: Long): UserProjectDashboardInfo {
+        return UserProjectDashboardInfo(User(id, name, email).getProjectDashboard(projectId))
+    }
 }
