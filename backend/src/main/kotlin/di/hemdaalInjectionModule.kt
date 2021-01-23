@@ -16,4 +16,5 @@ val hemdaalInjectionModule = module {
     single { CommitRepository() }
     single { CodeManagementRepository() }
     single { UserProjectDashboardRepository() }
+    single { ProjectWidgetRepository() }
 }

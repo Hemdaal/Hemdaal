@@ -60,10 +60,18 @@ object SoftwareComponentTable : Table(name = "software_component") {
 }
 
 object CommitTable : Table(name = "commit") {
-    val sha: Column<String> = varchar("sha", 1000).primaryKey()
+    val id: Column<Long> = long("id").autoIncrement().primaryKey()
+    val softwareId: Column<Long> = long("software_id").references(SoftwareComponentTable.id)
+    val sha: Column<String> = varchar("sha", 1000)
     val message: Column<String> = varchar("message", 1000)
     val authorId: Column<Long> = long("author_id")
     val time: Column<Long> = long("time")
+}
+
+object AuthorTable : Table(name = "author") {
+    val id: Column<Long> = long("id").autoIncrement().primaryKey()
+    val name: Column<String?> = varchar("name", 1000).nullable()
+    val email: Column<String?> = varchar("email", 1000).nullable()
 }
 
 object BuildTable : Table(name = "build") {

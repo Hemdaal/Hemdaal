@@ -1,3 +1,2 @@
 rootProject.name = 'hemdaal'
 include 'restApi', 'backend'
-

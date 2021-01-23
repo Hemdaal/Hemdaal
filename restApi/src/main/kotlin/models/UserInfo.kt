@@ -27,7 +27,7 @@ data class UserInfo(
         return ProjectInfo(projectScopePair.first, projectScopePair.second)
     }
 
-    fun getProjectDashboard(projectId: Long): UserProjectDashboardInfo {
+    fun projectDashboard(projectId: Long): UserProjectDashboardInfo {
         return UserProjectDashboardInfo(User(id, name, email).getProjectDashboard(projectId))
     }
 }
