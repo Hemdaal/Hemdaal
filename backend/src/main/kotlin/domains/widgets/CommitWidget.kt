@@ -3,10 +3,10 @@ package domains.widgets
 class CommitWidget(
     id: Long,
     projectId: Long,
-    val softwareId: Long
+    val softwareId: Long?
 ) : ProjectWidget(id, projectId) {
 
-    constructor(id: Long, projectId: Long, additionalInfo: String) : this(id, projectId, additionalInfo.toLong())
+    constructor(id: Long, projectId: Long, additionalInfo: String) : this(id, projectId, additionalInfo.toLongOrNull())
 
     override fun getAdditionalInfo(): String {
         return softwareId.toString()

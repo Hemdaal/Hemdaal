@@ -29,6 +29,7 @@ class UserProjectDashboard(
             type = type,
             additonalInfo = additionalInfo
         )
+        widgetIds.add(widget.id)
         userProjectDashboardRepository.setOrderedWidgets(
             userId = userId,
             projectId = projectId,
