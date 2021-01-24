@@ -35,4 +35,10 @@ class Project(
         projectCollaboratorRepository.createCollaboratorAccess(collaborator.id, id, emptyList())
         return collaborator
     }
+
+    fun syncMetrics() {
+        getSoftwareComponents().forEach {
+            it.syncMetrics()
+        }
+    }
 }

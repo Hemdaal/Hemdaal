@@ -41,4 +41,9 @@ data class ProjectInfo(
     ): CollaboratorInfo {
         return CollaboratorInfo(Project(id, name).addCollaborator(userName, userEmail))
     }
+
+    fun sync(): Boolean {
+        Project(id, name).syncMetrics()
+        return true
+    }
 }

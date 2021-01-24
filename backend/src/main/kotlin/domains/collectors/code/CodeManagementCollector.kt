@@ -1,25 +1,31 @@
 package domains.collectors.code
 
-import domains.development.RepoTool
+import di.ServiceLocator
+import domains.development.CodeManagement
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import repositories.CodeManagementRepository
 
 class CodeManagementCollector {
 
+    private val codeManagementRepository: CodeManagementRepository = ServiceLocator.codeManagementRepository
+
     fun collect() {
         val syncTime = System.currentTimeMillis()
-        val lastSyncedCodeManagements = getNonSyncedCodeManagements()
+        val lastSyncedRepoTools = getNonSyncedRepoTools(syncTime)
+        syncCodeManagements(lastSyncedRepoTools)
+    }
 
-        lastSyncedCodeManagements.forEach { codeManagement ->
-
+    private fun syncCodeManagements(repoTools: List<CodeManagement>) {
+        repoTools.forEach { codeManagement ->
             CoroutineScope(Dispatchers.Main).launch {
-                codeManagement.collect()
+                codeManagement.sync()
             }
         }
     }
 
-    private fun getNonSyncedCodeManagements(): List<RepoTool> {
-        return emptyList()
+    private fun getNonSyncedRepoTools(syncTime: Long): List<CodeManagement> {
+        return codeManagementRepository.getLastSyncedCodeManagements(syncTime)
     }
 }

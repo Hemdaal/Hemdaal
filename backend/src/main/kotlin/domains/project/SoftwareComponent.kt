@@ -22,4 +22,8 @@ class SoftwareComponent(
     )
 
     fun getCodeManagement() = codeManagementRepository.getCodeManagement(id)
+
+    fun syncMetrics() {
+        getCodeManagement()?.sync()
+    }
 }

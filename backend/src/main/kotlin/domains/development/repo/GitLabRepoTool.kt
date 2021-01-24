@@ -1,9 +1,9 @@
 package domains.development.repo
 
-import domains.collectors.code.gitlab.GitlabCommitCollector
-import domains.collectors.code.gitlab.GitlabProjectUrl
 import domains.development.Commit
 import domains.development.RepoTool
+import gitlab.GitlabCommitCollector
+import gitlab.GitlabProjectUrl
 
 class GitLabRepoTool(
     url: String,
@@ -21,7 +21,7 @@ class GitLabRepoTool(
     private fun collectCommitAndAdd(page: Int, since: Long) {
         val pageCount = 10
 
-        val gitlabCommits = GitlabCommitCollector(GitlabProjectUrl(repoUrl)).getCommits(page, pageCount, since)
+        val gitlabCommits = GitlabCommitCollector(GitlabProjectUrl(repoUrl), token).getCommits(page, pageCount, since)
         if (gitlabCommits.isNotEmpty()) {
             saveCommits(gitlabCommits.map {
                 Commit(

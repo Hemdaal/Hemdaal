@@ -41,8 +41,8 @@ object CodeManagementTable : Table(name = "git_tool") {
     val url: Column<String> = varchar("url", 1000)
     val type: Column<String> = varchar("type", 100)
     val token: Column<String?> = varchar("token", 100).nullable()
-    val lastSynced: Column<Long?> = long("last_synced").nullable()
-    val softwareId: Column<Long> = long("software_id").references(SoftwareComponentTable.id)
+    val lastSynced: Column<Long> = long("last_synced").default(0L)
+    val softwareId: Column<Long> = long("software_id").uniqueIndex().references(SoftwareComponentTable.id)
 }
 
 object BuildManagementTable : Table(name = "build_management") {
@@ -50,7 +50,7 @@ object BuildManagementTable : Table(name = "build_management") {
     val url: Column<String> = varchar("url", 1000)
     val type: Column<String> = varchar("type", 100)
     val token: Column<String?> = varchar("token", 100).nullable()
-    val softwareId: Column<Long> = long("software_id").references(SoftwareComponentTable.id)
+    val softwareId: Column<Long> = long("software_id").uniqueIndex().references(SoftwareComponentTable.id)
 }
 
 object SoftwareComponentTable : Table(name = "software_component") {
@@ -64,7 +64,7 @@ object CommitTable : Table(name = "commit") {
     val softwareId: Column<Long> = long("software_id").references(SoftwareComponentTable.id)
     val sha: Column<String> = varchar("sha", 1000)
     val message: Column<String> = varchar("message", 1000)
-    val authorId: Column<Long> = long("author_id")
+    val authorId: Column<Long?> = long("author_id").nullable()
     val time: Column<Long> = long("time")
 }
 

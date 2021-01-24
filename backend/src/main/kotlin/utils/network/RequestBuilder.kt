@@ -4,8 +4,6 @@ import com.google.gson.Gson
 import okhttp3.Headers.Companion.toHeaders
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
-import utils.RequestType.GET
-import utils.RequestType.POST
 
 class RequestBuilder(
     baseUrl: String
@@ -14,7 +12,7 @@ class RequestBuilder(
     private val urlBuffer = StringBuffer(baseUrl)
     private val headers = mutableMapOf<String, String>()
     private val params = mutableMapOf<String, String>()
-    private var requestType: RequestType = GET
+    private var requestType: RequestType = RequestType.GET
     private var body: String = ""
 
     fun appendPath(pathToAppend: String): RequestBuilder {
@@ -48,7 +46,7 @@ class RequestBuilder(
 
     fun addPayload(graphQLRequest: GraphQLRequest): RequestBuilder {
         body = Gson().toJson(graphQLRequest)
-        requestType = POST
+        requestType = RequestType.POST
         return this
     }
 
@@ -58,8 +56,8 @@ class RequestBuilder(
             .headers(headers.toHeaders())
 
         when (requestType) {
-            GET -> requestBuilder.get()
-            POST -> requestBuilder.post(body.toRequestBody())
+            RequestType.GET -> requestBuilder.get()
+            RequestType.POST -> requestBuilder.post(body.toRequestBody())
         }
 
         return requestBuilder.build()

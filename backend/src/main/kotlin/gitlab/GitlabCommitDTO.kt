@@ -1,4 +1,4 @@
-package domains.collectors.code.gitlab
+package gitlab
 
 import com.google.gson.annotations.SerializedName
 

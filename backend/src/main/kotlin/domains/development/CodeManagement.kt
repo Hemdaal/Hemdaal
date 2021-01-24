@@ -13,20 +13,26 @@ class CodeManagement(
     fun getCommits(
         startTime: Long? = 0
     ): List<Commit> {
-        return emptyList()
+        return tool.getCommits()
     }
 
     fun getMergeRequests(
         startTime: Long? = 0
     ): List<MergeRequest> {
-        return emptyList()
+        return tool.getMRs()
+    }
+
+    fun sync() {
+        tool.collect()
+        setLastSynced(System.currentTimeMillis())
     }
 
     fun getLastSynced(): Long {
         return lastSynced
     }
 
-    fun setLastSynced(lastSynced: Long) {
+    private fun setLastSynced(lastSynced: Long) {
+        this.lastSynced = lastSynced
         codeManagementRepository.setLastSynced(id, lastSynced)
     }
 }

@@ -1,4 +1,4 @@
-package domains.collectors.code.gitlab
+package gitlab
 
 data class GitlabProjectResponse(
     val data: GitlabProject

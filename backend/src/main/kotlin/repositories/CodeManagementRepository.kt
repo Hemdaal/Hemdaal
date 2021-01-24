@@ -6,12 +6,9 @@ import domains.development.RepoToolType
 import domains.development.RepoToolType.*
 import domains.development.repo.GitLabRepoTool
 import domains.development.repo.GithubRepoTool
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
 
 class CodeManagementRepository {
 
@@ -37,6 +34,16 @@ class CodeManagementRepository {
         }
     }
 
+    fun getLastSyncedCodeManagements(lastSynced: Long): List<CodeManagement> {
+        return transaction {
+
+            CodeManagementTable.select(where = { (CodeManagementTable.lastSynced.lessEq(lastSynced)) })
+                .orderBy(CodeManagementTable.lastSynced, SortOrder.ASC).limit(0, 10).map {
+                    convertRowToCodeManagement(it)
+                }
+        }
+    }
+
     fun setLastSynced(id: Long, lastSynced: Long) {
         transaction {
             CodeManagementTable.update(where = { CodeManagementTable.id eq id }) {
@@ -49,18 +56,20 @@ class CodeManagementRepository {
         val repoToolType = valueOf(row[CodeManagementTable.type])
         val repoTool = when (repoToolType) {
             GITHUB -> GithubRepoTool(
-                row[CodeManagementTable.url],
-                row[CodeManagementTable.token]
+                url = row[CodeManagementTable.url],
+                softwareId = row[CodeManagementTable.softwareId],
+                token = row[CodeManagementTable.token]
             )
             GITLAB -> GitLabRepoTool(
-                row[CodeManagementTable.url],
-                row[CodeManagementTable.token]
+                url = row[CodeManagementTable.url],
+                softwareId = row[CodeManagementTable.softwareId],
+                token = row[CodeManagementTable.token]
             )
         }
         return CodeManagement(
             id = row[CodeManagementTable.id],
             tool = repoTool,
-            lastSynced = row[CodeManagementTable.lastSynced] ?: 0L
+            lastSynced = row[CodeManagementTable.lastSynced]
         )
     }
 
@@ -68,18 +77,20 @@ class CodeManagementRepository {
         val repoToolType = valueOf(row[CodeManagementTable.type])
         val repoTool = when (repoToolType) {
             GITHUB -> GithubRepoTool(
-                row[CodeManagementTable.url],
-                row[CodeManagementTable.token]
+                url = row[CodeManagementTable.url],
+                softwareId = row[CodeManagementTable.softwareId],
+                token = row[CodeManagementTable.token]
             )
             GITLAB -> GitLabRepoTool(
-                row[CodeManagementTable.url],
-                row[CodeManagementTable.token]
+                url = row[CodeManagementTable.url],
+                softwareId = row[CodeManagementTable.softwareId],
+                token = row[CodeManagementTable.token]
             )
         }
         return CodeManagement(
             id = row[CodeManagementTable.id],
             tool = repoTool,
-            lastSynced = row[CodeManagementTable.lastSynced] ?: 0L
+            lastSynced = row[CodeManagementTable.lastSynced]
         )
     }
 
