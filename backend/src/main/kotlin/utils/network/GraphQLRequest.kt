@@ -1,9 +1,9 @@
 package utils.network
 
 data class GraphQLRequest(
+    private val operationName: String,
     private val query: String,
-    private val variables: MutableMap<String, String> = mutableMapOf(),
-    private val operationName: String = ""
+    private val variables: MutableMap<String, String> = mutableMapOf()
 ) {
 
     fun addVariable(key: String, value: String): GraphQLRequest {

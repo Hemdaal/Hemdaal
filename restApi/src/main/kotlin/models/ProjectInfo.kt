@@ -2,6 +2,9 @@ package main.kotlin.models
 
 import domains.project.Project
 import domains.user.Access
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 data class ProjectInfo(
     val id: Long,
@@ -43,7 +46,9 @@ data class ProjectInfo(
     }
 
     fun sync(): Boolean {
-        Project(id, name).syncMetrics()
+        CoroutineScope(Dispatchers.Main).launch {
+            Project(id, name).syncMetrics()
+        }
         return true
     }
 }

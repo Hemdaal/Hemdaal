@@ -1,9 +1,9 @@
 package domains.development.repo
 
+import domains.collectors.code.gitlab.GitlabCommitCollector
+import domains.collectors.code.gitlab.GitlabProjectUrl
 import domains.development.Commit
 import domains.development.RepoTool
-import gitlab.GitlabCommitCollector
-import gitlab.GitlabProjectUrl
 
 class GitLabRepoTool(
     url: String,
@@ -13,7 +13,7 @@ class GitLabRepoTool(
 
     override fun collect() {
         val lastCommitTime = getLastCommitTime()
-        collectCommitAndAdd(0, lastCommitTime)
+        collectCommitAndAdd(1, lastCommitTime)
 
         //TODO collect MRS
     }

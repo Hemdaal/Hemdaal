@@ -41,7 +41,7 @@ object CodeManagementTable : Table(name = "git_tool") {
     val url: Column<String> = varchar("url", 1000)
     val type: Column<String> = varchar("type", 100)
     val token: Column<String?> = varchar("token", 100).nullable()
-    val lastSynced: Column<Long> = long("last_synced").default(0L)
+    val lastSynced: Column<Long?> = long("last_synced").nullable()
     val softwareId: Column<Long> = long("software_id").uniqueIndex().references(SoftwareComponentTable.id)
 }
 

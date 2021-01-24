@@ -6,7 +6,7 @@ import repositories.CodeManagementRepository
 class CodeManagement(
     val id: Long,
     val tool: RepoTool,
-    private var lastSynced: Long
+    private var lastSynced: Long?
 ) {
     private val codeManagementRepository: CodeManagementRepository = ServiceLocator.codeManagementRepository
 
@@ -27,7 +27,7 @@ class CodeManagement(
         setLastSynced(System.currentTimeMillis())
     }
 
-    fun getLastSynced(): Long {
+    fun getLastSynced(): Long? {
         return lastSynced
     }
 

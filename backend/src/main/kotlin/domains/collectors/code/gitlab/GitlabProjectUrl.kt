@@ -1,4 +1,4 @@
-package gitlab
+package domains.collectors.code.gitlab
 
 import io.ktor.http.*
 

@@ -1,4 +1,4 @@
-package gitlab
+package domains.collectors.code.gitlab
 
 import com.google.gson.reflect.TypeToken
 import utils.network.GraphQLRequest
@@ -36,10 +36,15 @@ class GitlabCommitCollector(private val url: GitlabProjectUrl, private val token
     private fun getProjectId(): Int? {
         val request = RequestBuilder(url.getBaseUrl()).appendPath("api/graphql")
         val query =
-            GraphQLRequest("query getProjectId(\$projectPath: ID!) {\\n  project(fullPath: \$projectPath) {\\n    id\\n  }\\n}")
-                .addVariable("projectPath", url.getProjectPath())
+            GraphQLRequest(
+                operationName = "getProjectId",
+                query = "query getProjectId(\$projectPath: ID!) { project(fullPath: \$projectPath) {    id  }}"
+            ).addVariable("projectPath", url.getProjectPath())
         request.addPayload(query)
+        token?.let {
+            request.addHeader("PRIVATE-TOKEN", token)
+        }
 
-        return NetworkEngine.execute(request.build(), GitlabProjectResponse::class.java)?.data?.getProjectId()
+        return NetworkEngine.execute(request.build(), GitlabProjectResponse::class.java)?.data?.project?.getProjectId()
     }
 }

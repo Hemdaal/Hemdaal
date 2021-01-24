@@ -17,6 +17,7 @@ class CommitRepository {
                 this[CommitTable.authorId] = it.authorId
                 this[CommitTable.time] = it.time
                 this[CommitTable.softwareId] = softwareId
+                this[CommitTable.message] = it.message
             })
         }
     }

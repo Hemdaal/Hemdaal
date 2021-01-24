@@ -3,6 +3,7 @@ import domains.collectors.CollectorRunner
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 object InitService {
 
@@ -11,7 +12,7 @@ object InitService {
 
         GlobalScope.launch {
             while (true) {
-                delay(1 * 60 * 60)
+                delay(TimeUnit.HOURS.toMillis(1))
 
                 collectorRunner.fetchAndRunCollectors()
             }

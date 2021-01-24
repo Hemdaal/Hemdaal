@@ -19,7 +19,7 @@ class CodeManagementCollector {
 
     private fun syncCodeManagements(repoTools: List<CodeManagement>) {
         repoTools.forEach { codeManagement ->
-            CoroutineScope(Dispatchers.Main).launch {
+            CoroutineScope(Dispatchers.Default).launch {
                 codeManagement.sync()
             }
         }
