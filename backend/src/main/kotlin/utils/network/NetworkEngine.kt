@@ -26,6 +26,7 @@ object NetworkEngine {
         val response = client.newCall(request).execute()
 
         try {
+            println(response.code)
             return Gson().fromJson(response.body?.string(), valueType)
         } catch (e: Exception) {
             e.printStackTrace()

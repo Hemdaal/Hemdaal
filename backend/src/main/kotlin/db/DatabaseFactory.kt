@@ -31,12 +31,9 @@ class DatabaseFactory(
                 CollaboratorTable,
                 ProjectTable,
                 SoftwareComponentTable,
-                BuildManagementTable,
-                ProjectManagementTable,
                 CodeManagementTable,
                 CommitTable,
                 UserProjectDashboardTable,
-                ProjectWidgetTable,
                 AuthorTable
             )
         }

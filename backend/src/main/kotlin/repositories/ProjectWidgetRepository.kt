@@ -1,21 +1,33 @@
 package repositories
 
 import db.ProjectWidgetTable
-import domains.widgets.CommitWidget
-import domains.widgets.ProjectWidget
-import domains.widgets.ProjectWidgetType
-import domains.widgets.ProjectWidgetType.COMMIT
-import domains.widgets.ProjectWidgetType.valueOf
+import domains.dashboard.widgets.CommitByDayWidget
+import domains.dashboard.widgets.ProjectWidget
+import domains.dashboard.widgets.ProjectWidgetType
+import domains.dashboard.widgets.ProjectWidgetType.COMMIT_BY_DAY
+import domains.dashboard.widgets.ProjectWidgetType.valueOf
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class ProjectWidgetRepository {
 
-    fun getProjectWidgets(widgetIds: List<Long>): List<ProjectWidget> {
+    fun getProjectWidgets(widgetIds: List<Long>, userId: Long): List<ProjectWidget> {
         return transaction {
-            ProjectWidgetTable.select(where = { ProjectWidgetTable.id.inList(widgetIds) }).map {
-                convertRowToUserProjectDashboard(it)
+            ProjectWidgetTable.select(where = {
+                ProjectWidgetTable.id.inList(widgetIds).and(ProjectWidgetTable.userId.eq(userId))
+            }).map {
+                convertRowToProjectWidget(it)
+            }
+        }
+    }
+
+    fun getProjectWidget(widgetId: Long, userId: Long): ProjectWidget? {
+        return transaction {
+            ProjectWidgetTable.select(where = {
+                ProjectWidgetTable.id.eq(widgetId).and(ProjectWidgetTable.userId.eq(userId))
+            }).firstOrNull()?.let {
+                convertRowToProjectWidget(it)
             }
         }
     }
@@ -28,7 +40,7 @@ class ProjectWidgetRepository {
                 it[ProjectWidgetTable.projectId] = projectId
                 it[ProjectWidgetTable.additionalInfo] = additonalInfo
             }.let {
-                convertRowToUserProjectDashboard(it)
+                convertRowToProjectWidget(it)
             }
         }
     }
@@ -40,27 +52,29 @@ class ProjectWidgetRepository {
         }
     }
 
-    private fun convertRowToUserProjectDashboard(row: ResultRow): ProjectWidget {
+    private fun convertRowToProjectWidget(row: ResultRow): ProjectWidget {
 
         val id = row[ProjectWidgetTable.id]
+        val name = row[ProjectWidgetTable.name]
         val type = valueOf(row[ProjectWidgetTable.type])
         val projectId = row[ProjectWidgetTable.projectId]
         val additionalInfo = row[ProjectWidgetTable.additionalInfo] ?: "0"
 
         return when (type) {
-            COMMIT -> CommitWidget(id, projectId, additionalInfo)
+            COMMIT_BY_DAY -> CommitByDayWidget(id, name, projectId, additionalInfo)
         }
     }
 
-    private fun convertRowToUserProjectDashboard(row: InsertStatement<Number>): ProjectWidget {
+    private fun convertRowToProjectWidget(row: InsertStatement<Number>): ProjectWidget {
 
         val id = row[ProjectWidgetTable.id]
+        val name = row[ProjectWidgetTable.name]
         val type = valueOf(row[ProjectWidgetTable.type])
         val projectId = row[ProjectWidgetTable.projectId]
         val additionalInfo = row[ProjectWidgetTable.additionalInfo] ?: "0"
 
         return when (type) {
-            COMMIT -> CommitWidget(id, projectId, additionalInfo)
+            COMMIT_BY_DAY -> CommitByDayWidget(id, name, projectId, additionalInfo)
         }
     }
 }

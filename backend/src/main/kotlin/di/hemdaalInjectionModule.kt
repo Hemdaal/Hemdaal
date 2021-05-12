@@ -1,12 +1,12 @@
 package di
 
-import domains.System
+import domains.UserService
 import org.koin.dsl.module
 import repositories.*
 import utils.HashUtils
 
 val hemdaalInjectionModule = module {
-    single { System() }
+    single { UserService() }
     single { ProjectRepository() }
     single { UserRepository() }
     single { ProjectCollaboratorRepository() }
@@ -16,5 +16,4 @@ val hemdaalInjectionModule = module {
     single { CommitRepository() }
     single { CodeManagementRepository() }
     single { UserProjectDashboardRepository() }
-    single { ProjectWidgetRepository() }
 }

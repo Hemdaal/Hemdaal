@@ -1,7 +1,7 @@
 package repositories
 
 import db.CollaboratorTable
-import domains.Collaborator
+import domains.user.Collaborator
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.insert

@@ -1,7 +1,7 @@
 package repositories
 
 import db.UserProjectDashboardTable
-import domains.widgets.UserProjectDashboard
+import domains.dashboard.UserProjectDashboard
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
 import org.jetbrains.exposed.sql.transactions.transaction

@@ -1,6 +1,6 @@
 package main.kotlin.auth
 
-import domains.System
+import domains.UserService
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
@@ -15,7 +15,7 @@ const val USER_TOKEN_COOKIE = "user_token_cookie"
 
 fun Application.installAuth() {
 
-    val system: System by inject()
+    val userService: UserService by inject()
     val jwtTokenManager: JWTTokenManager by inject()
 
     install(Sessions) {
@@ -27,9 +27,9 @@ fun Application.installAuth() {
     install(Authentication) {
         basic(name = BASIC_AUTH) {
             realm = REALM
-            skipWhen { call -> call.request.headers["Authorization"] == null }
+            skipWhen { call -> call.request.headers["Authorization"].isNullOrBlank() }
             validate { credentials ->
-                val user = system.getUserBy(credentials.name, credentials.password)
+                val user = userService.getUserBy(credentials.name, credentials.password)
                 if (user != null) {
                     val token = jwtTokenManager.createToken(user)
                     if (token != null) {
@@ -46,7 +46,7 @@ fun Application.installAuth() {
 
         jwt(name = JWT_AUTH) {
             realm = REALM
-            skipWhen { call -> call.request.headers["Authorization"] == null }
+            skipWhen { call -> call.request.headers["Authorization"].isNullOrBlank() }
             verifier(jwtTokenManager.verifier)
             validate { credential ->
                 val email = jwtTokenManager.getEmailFromJwt(credential.payload.claims)
@@ -58,7 +58,7 @@ fun Application.installAuth() {
 
         //JWT Based session.
         session<Session>(name = SESSION_AUTH) {
-            skipWhen { call -> call.request.headers["Authorization"] == null }
+            skipWhen { call -> call.request.headers["Authorization"].isNullOrBlank() }
             validate {
                 val session: Session? = sessions.get(USER_TOKEN_COOKIE) as Session?
                 if (session != null) {

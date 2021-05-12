@@ -1,7 +1,7 @@
 package domains.project
 
 import di.ServiceLocator
-import domains.development.RepoToolType
+import domains.codeManagement.repo.RepoToolType
 
 class SoftwareComponent(
     val id: Long,

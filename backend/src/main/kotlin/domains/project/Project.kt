@@ -1,8 +1,8 @@
 package domains.project
 
 import di.ServiceLocator
-import domains.Collaborator
 import domains.user.Access
+import domains.user.Collaborator
 import repositories.CollaboratorRepository
 import repositories.ProjectCollaboratorRepository
 

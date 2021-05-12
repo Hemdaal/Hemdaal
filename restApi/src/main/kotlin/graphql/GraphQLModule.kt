@@ -14,13 +14,14 @@ import io.ktor.routing.*
 import main.kotlin.auth.BASIC_AUTH
 import main.kotlin.auth.JWT_AUTH
 import main.kotlin.auth.SESSION_AUTH
+import main.kotlin.graphql.nodes.EntryNode
 
 data class GraphQLRequest(val query: String?, val operationName: String?, val variables: Map<String, Any>?)
 
 fun Application.installGraphQL() {
 
-    val config = SchemaGeneratorConfig(listOf("main.kotlin.models"))
-    val queries = listOf(TopLevelObject(Entry()))
+    val config = SchemaGeneratorConfig(listOf("graphql.nodes"))
+    val queries = listOf(TopLevelObject(EntryNode()))
     val graphQL = GraphQL.newGraphQL(toSchema(config = config, queries = queries, mutations = queries)).build()
 
     suspend fun ApplicationCall.executeQuery() {

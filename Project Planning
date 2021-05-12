@@ -16,3 +16,9 @@ MVP Version Features.
 De Scoped :
 1. Edit Project
 2. Add members
+
+
+Decision Logs:
+1. Decided to go with custo widgets and metrics(Not to be using a generic metric data)
+    Reason: 1. Not all metrics can be fetched in this approach as some of the metric needs complex SQL queries.
+            2. We cannot make the dashboard widget to perform actions such as promote/deploy.

@@ -1,7 +1,7 @@
 package domains.collectors.code
 
 import di.ServiceLocator
-import domains.development.CodeManagement
+import domains.codeManagement.CodeManagement
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

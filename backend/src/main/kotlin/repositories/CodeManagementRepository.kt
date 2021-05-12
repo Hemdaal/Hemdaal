@@ -1,11 +1,11 @@
 package repositories
 
 import db.CodeManagementTable
-import domains.development.CodeManagement
-import domains.development.RepoToolType
-import domains.development.RepoToolType.*
-import domains.development.repo.GitLabRepoTool
-import domains.development.repo.GithubRepoTool
+import domains.codeManagement.CodeManagement
+import domains.codeManagement.repo.GitLabRepoTool
+import domains.codeManagement.repo.GithubRepoTool
+import domains.codeManagement.repo.RepoToolType
+import domains.codeManagement.repo.RepoToolType.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
 import org.jetbrains.exposed.sql.transactions.transaction

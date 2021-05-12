@@ -3,9 +3,9 @@ package repositories
 import db.CollaboratorTable
 import db.ProjectCollaboratorTable
 import db.ProjectTable
-import domains.Collaborator
 import domains.project.Project
 import domains.user.Access
+import domains.user.Collaborator
 import domains.user.Scope
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.and

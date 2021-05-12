@@ -1,9 +1,8 @@
 package domains.user
 
 import di.ServiceLocator
-import domains.Collaborator
+import domains.dashboard.UserProjectDashboard
 import domains.project.Project
-import domains.widgets.UserProjectDashboard
 import repositories.CollaboratorRepository
 import repositories.ProjectCollaboratorRepository
 import repositories.ProjectRepository
