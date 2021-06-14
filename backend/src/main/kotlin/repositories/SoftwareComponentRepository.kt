@@ -1,17 +1,15 @@
 package repositories
 
+import db.ProjectCollaboratorTable
 import db.SoftwareComponentTable
 import domains.project.SoftwareComponent
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class SoftwareComponentRepository {
 
-    fun getSoftwareComponentsBy(projectId: Long): List<SoftwareComponent> {
+    fun getSoftwareComponentsByProject(projectId: Long): List<SoftwareComponent> {
         return transaction {
             SoftwareComponentTable.select(where = { SoftwareComponentTable.projectId eq projectId }).mapNotNull {
                 convertRowToSofwareComponent(it)
@@ -19,12 +17,28 @@ class SoftwareComponentRepository {
         }
     }
 
-    fun getSoftwareComponentsBy(projectId: Long, softwareId: Long): SoftwareComponent? {
+    fun getSoftwareComponentsByProject(projectId: Long, softwareId: Long): SoftwareComponent? {
         return transaction {
             SoftwareComponentTable.select(where = { (SoftwareComponentTable.projectId eq projectId) and (SoftwareComponentTable.id eq softwareId) })
                 .singleOrNull()?.let {
                     convertRowToSofwareComponent(it)
-            }
+                }
+        }
+    }
+
+    fun getSoftwareComponentsByUser(userId: Long, softwareId: Long): SoftwareComponent? {
+        return transaction {
+            SoftwareComponentTable.join(
+                ProjectCollaboratorTable,
+                JoinType.INNER,
+                additionalConstraint = {
+                    ProjectCollaboratorTable.projectId.eq(SoftwareComponentTable.projectId)
+                        .and(ProjectCollaboratorTable.collaboratorId.eq(userId))
+                })
+                .select(where = { SoftwareComponentTable.id eq softwareId })
+                .singleOrNull()?.let {
+                    convertRowToSofwareComponent(it)
+                }
         }
     }
 

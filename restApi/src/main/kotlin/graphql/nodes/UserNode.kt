@@ -22,6 +22,11 @@ data class UserNode(
             ProjectNode(it.first, it.second)
         }
 
+    fun softwareComponent(softwareId: Long): SoftwareComponentNode? =
+        User(id, name, email).getSoftwareComponent(softwareId)?.let {
+            SoftwareComponentNode(it.id, it.name)
+        }
+
     fun createProject(name: String): ProjectNode {
         val projectScopePair = User(id, name, email).createProject(name)
         return ProjectNode(projectScopePair.first, projectScopePair.second)

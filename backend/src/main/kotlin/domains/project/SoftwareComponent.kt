@@ -26,4 +26,9 @@ class SoftwareComponent(
     fun syncMetrics() {
         getCodeManagement()?.sync()
     }
+
+    fun removeCodeManagementTool(): Boolean {
+        //TODO delete codemanagement repo.
+        return false
+    }
 }

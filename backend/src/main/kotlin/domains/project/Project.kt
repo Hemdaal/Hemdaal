@@ -19,11 +19,11 @@ class Project(
     }
 
     fun getSoftwareComponents(): List<SoftwareComponent> {
-        return softwareComponentRepository.getSoftwareComponentsBy(id)
+        return softwareComponentRepository.getSoftwareComponentsByProject(id)
     }
 
     fun getSoftwareComponent(softwareId: Long): SoftwareComponent? {
-        return softwareComponentRepository.getSoftwareComponentsBy(id, softwareId)
+        return softwareComponentRepository.getSoftwareComponentsByProject(id, softwareId)
     }
 
     fun createSoftwareComponent(name: String): SoftwareComponent {
