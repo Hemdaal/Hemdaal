@@ -18,7 +18,7 @@ data class UserProjectDashboardNode(
             ProjectWidgetNode(it)
         })
 
-    fun addWidget(type: ProjectWidgetType, additionalInfo: String): ProjectWidgetNode {
+    fun addWidget(type: ProjectWidgetType, additionalInfo: String?): ProjectWidgetNode {
         return ProjectWidgetNode(
             UserProjectDashboard(userId, projectId).addWidget(
                 type = type,

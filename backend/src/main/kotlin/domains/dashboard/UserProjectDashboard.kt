@@ -25,7 +25,7 @@ class UserProjectDashboard(
         return widgets.sortedBy { orderById[it.id] }
     }
 
-    fun addWidget(type: ProjectWidgetType, additionalInfo: String): ProjectWidget {
+    fun addWidget(type: ProjectWidgetType, additionalInfo: String?): ProjectWidget {
         val widgetIds = getOrderedWidgetIds().toMutableList()
         val widget = projectWidgetRepository.addProjectWidget(
             projectId = projectId,

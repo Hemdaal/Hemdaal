@@ -32,7 +32,12 @@ class ProjectWidgetRepository {
         }
     }
 
-    fun addProjectWidget(projectId: Long, userId: Long, type: ProjectWidgetType, additonalInfo: String): ProjectWidget {
+    fun addProjectWidget(
+        projectId: Long,
+        userId: Long,
+        type: ProjectWidgetType,
+        additonalInfo: String?
+    ): ProjectWidget {
         return transaction {
             ProjectWidgetTable.insert {
                 it[ProjectWidgetTable.type] = type.name
