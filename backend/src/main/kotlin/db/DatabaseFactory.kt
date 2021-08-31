@@ -34,7 +34,8 @@ class DatabaseFactory(
                 CodeManagementTable,
                 CommitTable,
                 UserProjectDashboardTable,
-                AuthorTable
+                AuthorTable,
+                ProjectWidgetTable
             )
         }
     }

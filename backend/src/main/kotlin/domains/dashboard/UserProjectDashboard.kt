@@ -43,8 +43,8 @@ class UserProjectDashboard(
         return widget
     }
 
-    fun getWidget(widgetId: Long): ProjectWidget? {
-        return projectWidgetRepository.getProjectWidget(widgetId, userId)
+    fun getWidget(id: Long): ProjectWidget? {
+        return projectWidgetRepository.getProjectWidget(id, userId)
     }
 
     fun removeWidget(id: Long) {

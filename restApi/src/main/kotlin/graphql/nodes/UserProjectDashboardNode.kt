@@ -27,14 +27,14 @@ data class UserProjectDashboardNode(
         )
     }
 
-    fun getWidgets(): List<WidgetNode> {
+    fun widgets(): List<WidgetNode> {
         return UserProjectDashboard(userId, projectId).getOrderedProjectWidgets().map {
             WidgetNode(it)
         }
     }
 
-    fun getWidget(widgetId: Long): WidgetNode? {
-        return UserProjectDashboard(userId, projectId).getWidget(widgetId)?.let {
+    fun widget(id: Long): WidgetNode? {
+        return UserProjectDashboard(userId, projectId).getWidget(id)?.let {
             WidgetProvider.provide(it)
         }
     }

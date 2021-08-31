@@ -17,13 +17,13 @@ data class UserNode(
             ProjectNode(it.key, it.value)
         }
 
-    fun project(projectId: Long): ProjectNode? =
-        User(id, name, email).getProject(projectId)?.let {
+    fun project(id: Long): ProjectNode? =
+        User(id, name, email).getProject(id)?.let {
             ProjectNode(it.first, it.second)
         }
 
-    fun softwareComponent(softwareId: Long): SoftwareComponentNode? =
-        User(id, name, email).getSoftwareComponent(softwareId)?.let {
+    fun softwareComponent(id: Long): SoftwareComponentNode? =
+        User(id, name, email).getSoftwareComponent(id)?.let {
             SoftwareComponentNode(it.id, it.name)
         }
 

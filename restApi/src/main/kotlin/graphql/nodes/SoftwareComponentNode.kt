@@ -28,7 +28,7 @@ data class SoftwareComponentNode(
         return SoftwareComponent(id, name).removeCodeManagementTool()
     }
 
-    fun getCodeManagementTool() = SoftwareComponent(id, name).getCodeManagement()?.let {
+    fun codeManagementTool() = SoftwareComponent(id, name).getCodeManagement()?.let {
         CodeManagementNode.from(it)
     }
 }

@@ -7,18 +7,18 @@ class CommitByDayWidget(
     id: Long,
     name: String,
     projectId: Long,
-    val softwareId: Long
+    val softwareId: Long?
 ) : ProjectWidget(id, name, projectId) {
 
     private val commitRepository by lazy {
         ServiceLocator.commitRepository
     }
 
-    constructor(id: Long, name: String, projectId: Long, additionalInfo: String) : this(
+    constructor(id: Long, name: String, projectId: Long, additionalInfo: String?) : this(
         id,
         name,
         projectId,
-        additionalInfo.toLong()
+        additionalInfo?.toLong()
     )
 
     override fun getType() = ProjectWidgetType.COMMIT_BY_DAY
